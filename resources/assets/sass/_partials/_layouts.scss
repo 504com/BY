@@ -1,0 +1,76 @@
+/*
+[Layout]
+
+* body
+  + Backgrounds / _background.scss
+  + Preloader / _preload.scss
+  + Navigation / _mainMenu.scss
+  + Content / _page.scss
+      + Section / .main_block 
+      + Section / .about-app
+      + Section / OWL CAROUSEL
+      + Google map API / .map
+      + Informatio about APP / .info-about-app
+  + Fotorama / _fotoramaLayout.scss
+  + devises width / _devWidth.scss
+      + max devise width 991
+      + max devise width 767
+  + Scroll / _scrollStyler.scss
+*/
+
+a:focus,
+input:focus,
+textarea:focus,
+button:focus {
+  outline : none;
+}
+
+html,
+body {
+  position         : relative;
+  height           : 100%;
+  min-height       : 100%;
+  z-index          : 0;
+  //overflow         : hidden;
+  background-color: #1f1f1f;
+}
+
+noscript {
+  position         : fixed;
+  top              : 0;
+  left             : 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: table;
+
+  background-color : #000;
+
+  z-index          : 99999999;
+
+  h1.no-script {
+
+    display: table-cell;
+    vertical-align: middle;
+
+    color            : #fff;
+    text-align       : center;
+
+  }
+}
+
+// Стилі головного меню
+@import '_layout/_mainMenu.scss';
+
+// Стилі контенту на сторінці
+@import '_layout/_page.scss';
+
+// Додаткові стилі для фоторами
+@import '_layout/_fotoramaLayout.scss';
+
+// Стилі для меншої ширини девайсу
+@import '_layout/_devWidth.scss';
+
+
+

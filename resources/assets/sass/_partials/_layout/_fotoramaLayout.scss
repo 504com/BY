@@ -1,0 +1,338 @@
+/*
+* Fotorama layout
+*/
+
+.fotorama-style {
+  //position : absolute;
+  z-index  : 9999;
+
+  // show fotorama
+  &.open {
+    display : block;
+    //position: relative;
+  }
+
+  .item-index {
+    display : none;
+  }
+
+  // class for mobile devises
+  &.size-320 {
+
+    width   : 78% !important;
+    margin  : 0 auto;
+    padding : 8px 0 0 0;
+
+    font-family: "Abel", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    // fotorama's content
+    .fotorama__html {
+
+      width   : 100%;
+      height  : 100%;
+
+      // show content
+      &.open {
+        background-color: #fff;
+      }
+
+      .fotorama-info {
+        position: relative;
+
+        .team-name {
+          visibility : hidden;
+          opacity: 0;
+
+          transition         : opacity .5s ease;
+        }
+
+        .fotorama_show-icons {
+          visibility: hidden;
+        }
+
+        &.open {
+
+          .team-name {
+            visibility: visible;
+            display: block;
+            color: #000;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            line-height: 1.5;
+            margin: 13px 0 10px 0;
+
+            opacity: 1;
+
+            transition         : opacity .5s ease;
+
+            .team-work {
+              display: block;
+              font-size: 14px;
+              color: #666;
+              line-height: 1.5;
+              letter-spacing: 1.4px;
+              padding: 5px 0;
+            }
+          }
+
+          .item-index {
+            display : none;
+          }
+          .fotorama_show-icons {
+            visibility: visible;
+            display: block;
+            background: url("../img/share-black.svg") 50% 50% no-repeat;
+            background-size: 100%;
+
+            .fa {
+              position: absolute;
+              color: #373535;
+            }
+          }
+
+          ul {
+            li {
+              a {
+                color: rgba(0,0,0,0.6);
+              }
+            }
+          }
+
+        }
+
+        .item-index {
+          display    : none;
+        }
+
+        .fotorama_show-icons {
+          display : none;
+        }
+      }
+
+    }
+
+    .fotorama__stage {
+
+      margin : 0 auto 55px;
+
+      &.open {
+        margin : 0 auto 25px;
+      }
+    }
+
+    .fotorama__stage__shaft {
+      width : 100% !important;
+    }
+
+    .fotorama__stage__frame.fotorama__active {
+      height : 100%;
+    }
+
+    .fotorama_mobile-count {
+      display    : block;
+      text-align : center;
+      position   : absolute;
+      top        : -65px;
+      height     : 50px;
+      width      : 100%;
+      color      : rgba(255, 255, 255, .5);
+      font-size  : 16px;
+      padding    : 25px;
+    }
+
+    .bottom {
+      position : relative;
+      border   : none;
+      width    : 100%;
+      .close-this {
+        top: 0;
+        right  : 0;
+        left   : 0;
+        margin : 0 auto;
+      }
+    }
+
+  }
+
+  .fotorama__fullscreen-icon {
+    display : none !important;
+  }
+
+  .fotorama-info {
+    position   : absolute;
+    bottom     : 0;
+    margin     : 0;
+    width: 100%;
+
+    text-align : center;
+
+    ul {
+      position           : absolute;
+      bottom             : -6px;
+      left               : 0;
+      right              : 0;
+      margin             : 0 auto;
+      padding            : 0;
+      list-style         : none;
+      overflow           : hidden;
+      text-align         : center;
+      opacity            : 0;
+      visibility         : hidden;
+      z-index            : -1;
+
+      font-size: 0;
+
+      -webkit-transition : opacity .3s .2s ease;
+      -moz-transition    : opacity .3s .2s ease;
+      -ms-transition     : opacity .3s .2s ease;
+      -o-transition      : opacity .3s .2s ease;
+      transition         : opacity .3s .2s ease;
+
+      li {
+        display : inline-block;
+
+        &:before {
+          content : none;
+        }
+
+        a {
+          font-size : 17px;
+          padding   : 10px;
+
+          &:after {
+            content : none;
+          }
+        }
+      }
+      &.open {
+        opacity : 1;
+        z-index : 2;
+        visibility: visible;
+      }
+    }
+
+    .fotorama_show-icons {
+      position: relative;
+      display          : block;
+      width            : 20px;
+      height           : 20px;
+      margin           : 0 auto;
+      padding: 10px;
+      background-size: 100%;
+      //opacity: 1;
+      z-index: 3;
+
+      -webkit-transition : opacity .3s ease;
+      -moz-transition    : opacity .3s ease;
+      -ms-transition     : opacity .3s ease;
+      -o-transition      : opacity .3s ease;
+      transition         : opacity .3s ease;
+
+
+
+      &:after {
+        content: none;
+      }
+
+      &.open {
+        opacity: 0;
+        z-index: -1;
+      }
+
+      .fa {
+        left: 0;
+      }
+    }
+  }
+}
+
+.fotorama__nav {
+  max-height : 100px !important;
+}
+
+.hiden {
+  height     : 0;
+  visibility : hidden;
+  opacity    : 0;
+}
+
+// full-screen fotorama
+.fotorama--fullscreen {
+  opacity          : 0;
+  background-color : transparent;
+
+  transition: opacity .3s ease-in-out, background-color .3s ease;
+
+  /*background: transparent!important;*/
+
+  .fotorama__nav-wrap {
+    visibility : hidden;
+    opacity    : 0;
+    height     : 65px;
+
+    .fotorama__nav--thumbs {
+      height : 100%;
+
+      .fotorama__nav__shaft {
+        margin-top : 10px;
+      }
+    }
+
+  }
+
+  .fotorama-info {
+
+    bottom: 25px;
+
+    .team-name {
+      font-family    : "Abel", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size      : 40px;
+      color          : #fff;
+      line-height    : 1;
+      text-transform : uppercase;
+      letter-spacing : 8px;
+
+      .team-work {
+        display: block;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 4px;
+        padding: 8px 0 0 0;
+      }
+    }
+
+
+    .fotorama_show-icons {
+      @extend .navbar_show-icons;
+    }
+  }
+
+  &.open {
+    opacity : 1;
+    background-color: #000;
+
+    .fotorama__nav-wrap {
+      visibility       : visible;
+      opacity          : 1;
+      background-color : #000;
+    }
+  }
+
+  .fotorama__nav {
+    background-color : #000 !important;
+  }
+
+}
+
+.fotorama__img {
+  width  : 100%;
+  height : 100%;
+  left   : 0;
+  top    : 0;
+}
+
+.opacity {
+  visibility : hidden;
+  transition         : none;
+}

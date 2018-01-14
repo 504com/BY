@@ -1,0 +1,34 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 26, 2015, 5:12:54 PM
+    Author     : Alex
+*/
+
+
+@mixin ie-transform(
+    $scale: false,
+    $rotate: false,
+    $trans-x:  false,
+    $trans-y:  false,
+    $skew-x:   false,
+    $skew-y:   false,
+    $origin-x: false,
+    $origin-y: false
+) {
+    $trans: unquote("");
+
+    @if $scale { $trans: $trans scale($scale) }
+    @if $rotate { $trans: $trans rotate($rotate) }
+    @if $trans-x { $trans: $trans transX($trans-x) }
+    @if $trans-y { $trans: $trans transY($trans-y) }
+    @if $skew-x { $trans: $trans skewX($skew-x) }
+    @if $skew-y { $trans: $trans skewY($skew-y) }
+
+    @include experimental(transform, $trans, $moz: false, $webkit: false, $o: false, $khtml: false, $official: false, $ms: -ms);
+
+    @include simple-transform($scale, $rotate, $trans-x, $trans-y, $skew-x, $skew-y, $origin-x, $origin-y);
+}

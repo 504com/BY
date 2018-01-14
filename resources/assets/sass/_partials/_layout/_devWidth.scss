@@ -1,0 +1,344 @@
+/* Devise Width */
+
+// App Store and Google play buttons
+.app-store,
+.google-play {
+  display: block;
+  position: relative;
+  margin           : 0 auto 30px;
+  width            : 160px;
+  height           : 60px;
+  padding-left: 54px;
+  text-align: left;
+
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.5s ease, border-color .5s ease, color .5s ease;
+
+  cursor: pointer;
+
+  &::after {
+    content: none;
+  }
+
+  span {
+    font-size: 10px;
+    display: block;
+    line-height: 1;
+    margin-top: 13px;
+    margin-bottom: -5px;
+    letter-spacing: -0.5px;
+  }
+
+  .fa {
+    font-size: 25px;
+    position: absolute;
+    top: 50%;
+    left: 25px;
+
+    &.google-play-bg {
+
+      opacity: .2;
+      top: 23%;
+
+      -webkit-transition : opacity .5s ease;
+      -moz-transition    : opacity .5s ease;
+      -ms-transition     : opacity .5s ease;
+      -o-transition      : opacity .5s ease;
+      transition         : opacity .5s ease;
+
+      &:before {
+        content: '';
+        position: absolute;
+        top: 3px;
+        background: url("../img/play-market.png") top center no-repeat;
+        width: 26px;
+        height: 27px;
+        background-size: 100%;
+      }
+    }
+  }
+
+  &:hover {
+
+    border: 1px solid rgba(255, 255, 255, 1);
+
+    .fa {
+      &.google-play-bg {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.app-store {
+  float: left;
+}
+
+.google-play {
+  letter-spacing: -0.95px;
+  float: right;
+}
+
+.main_block {
+  .app-store,
+  .google-play{
+    display: none;
+  }
+}
+
+/* for screen < 991 */
+@media(max-width : 991px) {
+
+  #timer {
+    top : 5%;
+  }
+  .timer {
+    top : 5%;
+  }
+
+  .main_block {
+    padding : 52px 0 0 0;
+
+    &.carousel {
+      padding : 37px 0 0 0;
+    }
+  }
+
+  /* Collapsed menu */
+  .navbar-header {
+    width : 100%;
+  }
+
+  /* MAIN TEXT */
+  .main-text {
+    padding-left  : 50px;
+    padding-right : 50px;
+  }
+
+  /* MAIN BLOCK TEXT */
+  .main_block_text {
+    padding-left  : 35px;
+    padding-right : 35px;
+  }
+
+  .top-left-block {
+
+    will-change : transform;
+    will-change : -webkit-transform;
+
+    transform: rotate(15deg) translate(10%, -89%) scale(1.7);
+
+    z-index: -1;
+
+  }
+
+  @keyframes thumb {
+    0% {
+      transform         : rotate(14deg) translate(8%, -59%);
+    }
+    100% {
+      transform         : rotate(15deg) translate(8%, -59%);
+    }
+  }
+
+  .info-about-app {
+
+    .main-block {
+      height : 75%;
+      top    : 50%;
+    }
+    .info-section {
+      top   : 19.45%;
+      right : 10%;
+      width : 50%;
+    }
+    .app-img {
+      left        : 4%;
+      will-change : transform;
+      transform: translate(0, -50%);
+    }
+  }
+
+  .navbar-fixed-top .navbar-collapse, .navbar-fixed-bottom .navbar-collapse {
+    position : absolute;
+    top      : -139px;
+  }
+
+}
+
+/* for screen < 767 */
+
+@media (max-width : 767px) {
+
+  #timer {
+    top : 54%;
+    transform: translateY(-50%);
+  }
+  .timer {
+    top : 0;
+  }
+
+  .main_block {
+    padding : 39px 0 0 0;
+
+    .subscribe {
+      width: 60%;
+
+      &.open {
+        width: 90%;
+      }
+    }
+
+    &.contacts {
+      padding : 56px 0 0 0;
+    }
+
+    &.carousel {
+      padding : 9px 0 0 0;
+    }
+
+    &.main-page {
+      header {
+        h1 {
+          letter-spacing: 6px;
+        }
+      }
+    }
+
+    > header {
+      h1 {
+
+        font-size      : 30px;
+        letter-spacing : 6px;
+        margin         : 0 auto 28px;
+
+        &.main-page-heading {
+          line-height    : 1.2;
+          letter-spacing : 5px;
+        }
+      }
+    }
+
+    .main_block_text {
+      padding-left  : 10px;
+      padding-right : 10px;
+      p {
+        font-size   : 14px;
+        line-height : 2.15;
+        margin      : 0 0 30px 0px;
+
+        &.main-text {
+          padding-left  : 0;
+          padding-right : 0;
+        }
+      }
+      .category-group {
+        > li {
+          width : 56px;
+        }
+      }
+    }
+
+    &.about-app {
+      padding : 22px 0 0 0;
+    }
+
+    .open-info-about-app {
+      display : none;
+    }
+
+    .app-store,
+    .google-play {
+      display          : block;
+      float: none;
+
+      span {
+        margin-bottom: -1px;
+      }
+
+    }
+  }
+
+  .top-left-block {
+    display : none;
+  }
+
+  .owl-carousel {
+    &.demos {
+      max-width : 100%;
+      margin    : 0;
+
+      img {
+        opacity : 1;
+      }
+    }
+  }
+
+  .info-about-app {
+    display : none;
+    &.open {
+      display : none;
+    }
+  }
+
+  .mobile-show-index {
+    display    : none;
+    position   : absolute;
+    bottom     : 0;
+    left       : 0;
+    z-index    : 99999;
+    text-align : center;
+
+    &.open {
+      display : block;
+    }
+  }
+
+  .fotorama__stage__frame {
+
+    .fotorama__html {
+      display : table;
+    }
+  }
+
+  .fotorama__nav, .fotorama__stage {
+    overflow : visible !important;
+  }
+
+  .fotorama__wrap--only-active .fotorama__nav,
+  .fotorama__wrap--only-active .fotorama__stage {
+    width : 100% !important;
+  }
+
+  nav {
+    &.hide {
+      display : block !important;
+    }
+  }
+
+  .main_block.about-app {
+    &.close {
+      opacity : 1;
+    }
+  }
+
+  #bgvid {
+    display : none;
+  }
+
+  .navbar-nav {
+    > li {
+      > a {
+        //padding : 20px 10px;
+      }
+    }
+  }
+
+  figure {
+    float: none;
+    display: block;
+    margin: 0 auto;
+  }
+
+}

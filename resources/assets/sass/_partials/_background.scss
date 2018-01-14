@@ -1,0 +1,424 @@
+/* BACKGROUNDS */
+
+// video background
+video#bgvid {
+  position        : fixed;
+  top             : 50%;
+  left            : 50%;
+  min-width       : 100%;
+  min-height      : 100%;
+  width           : auto;
+  height          : auto;
+  z-index         : -100;
+  transform: translateX(-50%) translateY(-50%);
+  will-change     : transform;
+  background-size : cover;
+}
+
+// image background
+.image_bg {
+
+  background              : rgba(0, 0, 0, .5) url(../img/slider1.jpg) 50% 50% fixed;
+  background-size         : cover;
+
+}
+
+// gradient background
+.gradient_bg {
+  background: #34a6a9; /* Old browsers */
+  background: -moz-linear-gradient(top,  #34a6a9 0%, #534088 87%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #34a6a9 0%,#534088 87%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #34a6a9 0%,#534088 87%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34a6a9', endColorstr='#534088',GradientType=0 ); /* IE6-9 */
+  .wrapp {
+    .preload-bg {
+      background-color: rgba(0, 0, 0, 1);
+    }
+    #loadPrecent {
+      color: #fff;
+    }
+
+    &.done,
+    &.hide-preloader {
+      .preload-bg {
+        background-color: rgba(0, 0, 0, 0);
+      }
+    }
+  }
+}
+
+// color
+.color_bg {
+  background-color: #e4f7fe;
+}
+
+.color_bg {
+
+  .wrapp {
+    .preload-bg {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    #loadPrecent {
+      color: #000;
+    }
+
+    &.done,
+    &.hide-preloader {
+      .preload-bg {
+        background-color: rgba(255, 255, 255, 0);
+      }
+    }
+  }
+
+  .wrapp {
+    .preload-bg {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    #loadPrecent {
+      color: #000;
+    }
+
+    &.done,
+    &.hide-preloader {
+      .preload-bg {
+        background-color: rgba(255, 255, 255, 0);
+      }
+    }
+  }
+
+  // heading
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main_block {
+    header {
+      h1 {
+        color: rgba(0, 0, 0, 1);
+      }
+    }
+  }
+
+  // paragraphs
+  p,
+  .main_block_text .info address {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+  }
+
+  // links
+  a {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+
+    &:hover,
+    &:active {
+      color: rgba(0, 0, 0, 1)!important;
+    }
+
+    &:focus {
+      color: rgba(0, 0, 0, .5)!important;
+    }
+
+  }
+
+  // subscribe
+  .subscribe {
+    .subscribe-btn {
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      color: rgba(0, 0, 0, 0.5);
+
+      &:hover,
+      &:active {
+        border: 1px solid rgba(0, 0, 0, 1);
+        color: rgba(0, 0, 0, 1)!important;
+      }
+    }
+
+    &.open {
+      border: 1px solid #000;
+    }
+
+    .subscribe-form input[type="email"],
+    .subscribe-form input[type="text"] {
+      color: #000;
+    }
+
+    .subscribe-form input[type="submit"],
+    .subscribe-form input[type="button"] {
+      border-color: #000;
+      background: #000 url("../img/send-white.svg") 50% 50% no-repeat;
+      background-size: 65%;
+    }
+  }
+
+  // main menu
+  .navbar-brand {
+    color: #000;
+  }
+
+  .nav{
+    >li {
+      >a{
+        &:hover {
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+
+      &.active {
+        > a {
+          color: #000!important;
+        }
+      }
+    }
+  }
+
+  .navbar_share-icons{
+    > span {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  .navbar {
+    background-color : transparent;
+    border-top       : 1px solid rgba(0, 0, 0, 0.2);
+
+    .navbar-header {
+      border-bottom : 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-toggle {
+      border: none;
+
+      transition         : opacity .3s ease;
+      
+      .icon-bar {
+        background-color : rgba(0, 0, 0, 1);
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: transparent;
+      }
+      @media (min-width: 992px) {
+        opacity: .5;
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+    }
+  }
+
+  nav {
+    &.collapsed {
+      .navbar_icons {
+        height: auto!important;
+        > ul {
+          > li {
+            height: auto!important;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar_show-icons,
+  .fotorama--fullscreen .fotorama-info .fotorama_show-icons {
+    background: url("../img/share-black.svg") 50% 50% no-repeat;
+    background-size: 20px;
+  }
+
+  // main page
+
+  .main_block_text p.title-text,
+  .main_block_text .info address.title-text{
+    color: #000;
+  }
+
+  .category-group > li {
+    a {
+      svg {
+        fill : rgba(0, 0, 0, 0.5);
+      }
+      &:hover {
+        svg {
+          fill : rgba(0, 0, 0, 1);
+        }
+      }
+    }
+    &.active {
+      a {
+        svg {
+          fill : rgba(0, 0, 0, 1);
+        }
+      }
+    }
+  }
+
+  // carousel
+  .item .item-info .team-name {
+    color: #000;
+  }
+
+  // bottom
+  .bottom {
+    background-color: transparent;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+
+    .close-this {
+      &::before {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+      &::after {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      &:hover {
+        &::before {
+          background-color: rgba(0, 0, 0, 1);
+        }
+        &::after {
+          background-color: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+  }
+
+  .map {
+    .bottom {
+      background-color: #fff;
+    }
+  }
+
+  // stack
+  .stack__images li {
+    background: url("../img/app-black-bg.svg") 100% 100% no-repeat;
+  }
+
+  // scroll
+  .myScroll span {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  // download buttons
+  .app-store,
+  .google-play {
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 1);
+    }
+  }
+
+  // info about app
+  .info-about-app .info-about-app_block {
+    height: -webkit-calc(100% - 100px);
+    height: -moz-calc(100% - 100px);
+    height: calc(100% - 100px);
+  }
+
+  // fotorama
+  .fotorama--fullscreen{
+    &.open {
+      background-color: #fff;
+    }
+  }
+
+  .fotorama--fullscreen .fotorama__nav-wrap {
+    height: 80px;
+    background-color: #fff;
+  }
+
+  .fotorama--fullscreen .fotorama__nav,
+  .fotorama--fullscreen .fotorama__stage{
+    background-color: #fff!important;
+  }
+
+  .fotorama__stage__frame.fotorama__loaded--img.fotorama__active {
+    background-color: #fff;
+  }
+
+  .fotorama--fullscreen .fotorama-info .team-name {
+    color: #000!important;
+  }
+  .fotorama--fullscreen .fotorama-info .team-name .team-work {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .fotorama-style.size-320 .bottom {
+    margin-top: 0;
+    background-color: transparent;
+  }
+
+  // full canvas
+  .full-canvas {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .full-canvas.opened{
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  //buttons
+  button,
+  form input[type="button"],
+  form input[type="email"] {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  button:hover,
+  form input[type="button"]:hover,
+  form input[type="email"]:hover {
+    border-color: #000;
+    color: #000;
+  }
+
+  button:active,
+  form input[type="button"]:active,
+  form input[type="email"]:active {
+    border-color: #000;
+    background-color: #000;
+    color: #fff;
+  }
+
+  // bloquote
+
+  blockquote {
+
+    &:before {
+      background: url("../img/quote_inverse.png") top center no-repeat;
+      background-size: 100% 100%;
+      width: 14px;
+      height: 12px;
+    }
+
+    footer {
+      color: #000;
+    }
+
+  }
+
+}
+
+.video {
+  background: url(../img/video_bg.jpg);
+  background-size: cover;
+  .wrapp {
+    &.done,
+    &.hide-preloader {
+      .preload-bg {
+        background-color: rgba(0, 0, 0, .5);
+      }
+    }
+  }
+}
+
+@media screen and (max-device-width : 767px) {
+  body { background-color: #000; }
+  #bgvid {
+    display : none;
+  }
+}

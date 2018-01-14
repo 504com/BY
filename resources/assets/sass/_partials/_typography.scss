@@ -1,0 +1,324 @@
+/* Form */
+form {
+
+  * {
+    border-radius: 0;
+    outline: none;
+  }
+
+  input[type="text"] {
+    display: block;
+    width: 100%;
+    color: #fff;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid #4c4c4c;
+    padding: 5px 0;
+    letter-spacing: 1px;
+    margin : 0 0 46px 0;
+
+    will-change: border-bottom-color, color;
+
+    transition         : border-bottom-color .3s ease, color .3s ease;
+
+    &::-webkit-input-placeholder,
+    &:-moz-placeholder,
+    &::-moz-placeholder,
+    &:-ms-input-placeholder {
+      color: #4c4c4c;
+    }
+
+    &:hover,
+    &:focus {
+      border-bottom-color: #fff;
+
+      &::-webkit-input-placeholder,
+      &:-moz-placeholder,
+      &::-moz-placeholder,
+      &:-ms-input-placeholder {
+        color: #fff;
+      }
+
+    }
+
+
+  }
+
+  > div {
+    padding-left: 0!important;
+  }
+
+  // radio, checkbox
+
+  input[type="checkbox"]+label,
+  input[type="radio"]+label{
+    font-size: 14px;
+    font-weight: normal;
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    margin: 0 0 28px 0;
+    padding-left: 6px;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+
+  input[type="checkbox"]:disabled+label,
+  input[type="radio"]:disabled+label{
+    color: #333;
+    cursor: no-drop;
+  }
+  input[type="checkbox"]:disabled+label:before,
+  input[type="radio"]:disabled+label:before{
+    border-color: #333;
+    cursor: no-drop;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"]{
+    position: relative;
+    margin: 5px 6px 5px 6px;
+    visibility: hidden;
+  }
+
+  input[type="checkbox"] + label:before {
+    content          : '';
+    position         : absolute;
+    top              : -2px;
+    left             : -23px;
+    width            : 20px;
+    height           : 20px;
+    border           : 1px solid #fff;
+    background-color : transparent;
+    z-index          : 1;
+    cursor           : pointer;
+  }
+  input[type="checkbox"]:checked + label:after {
+    content           : '';
+    position          : absolute;
+    left              : -15px;
+    width             : 7px;
+    height            : 13px;
+    border-right      : 2px solid #fff;
+    border-bottom     : 2px solid #fff;
+    z-index           : 2;
+    background-color  : transparent;
+    cursor            : pointer;
+ 
+    transform         : skew(147deg, 224deg);
+    border-radius     : 0 2px 0 0;
+  }
+
+
+  input[type="radio"]+label:before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -25px;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  input[type="radio"]:checked+label:after{
+    content: '';
+    position: absolute;
+    left: -19px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  input[type="button"] {
+    @extend button;
+  }
+
+  input[type="email"] {
+
+    @extend button;
+    text-transform: none;
+
+  }
+
+  select {
+    width: 100%;
+  }
+
+}
+
+// checkbox group
+.check-group {
+  margin: 11px 0 26px 0px;
+  padding-left: 43px;
+  padding-right: 0;
+  overflow: hidden;
+}
+// radio group
+.radio-group {
+  margin: 11px 0 26px 0px;
+  padding-left: 20px;
+  padding-right: 0;
+  overflow: hidden;
+}
+// link group
+.link-group {
+  padding-left: 43px;
+  padding-right: 0;
+  overflow: hidden;
+}
+// button group
+.button-group {
+  padding-left: 9px!important;
+  padding-right: 0;
+  margin: 12px 0 0 0;
+}
+
+.form-message {
+  position: absolute;
+  left: 0;
+  top: 120%;
+  width: 100%;
+}
+
+// Typography form style for devides smaller 991px
+@media screen and (max-width: 991px ){
+
+  // checkbox-group
+  .check-group {
+    padding-left: 0;
+  }
+  // radio-group
+  .radio-group {
+    padding-left: 0;
+  }
+  // link group
+  .link-group {
+    padding-left: 0;
+    margin-top: 11px;
+  }
+  // button group
+  .button-group {
+    padding-left: 0!important;
+  }
+}
+
+@media screen and (max-width: 767px){
+
+  // LIST STYLE
+  ol {
+    &.left {
+      float: none;
+    }
+    &.marg-right-110 {
+      margin-right: 0;
+    }
+  }
+
+
+
+  // Image in the text
+  p {
+    img {
+      display: block;
+      float: none;
+      margin: 7px auto 15px;
+    }
+  }
+
+  // BLOCKQUOTES STYLE
+  blockquote {
+    padding: 37px 0 0 0;
+  }
+
+  input[type="text"] {
+    &.typo_form_name {
+      width: 100%;
+      float: none;
+    }
+  }
+  .typo_form_select{
+    float: none;
+  }
+
+  .check-group,
+  .radio-group,
+  .link-group {
+    margin-bottom: 10px;
+  }
+
+}
+
+
+/*
+  helper classes
+*/
+
+// margin bottom in px
+.marg-bot-23 {
+  margin-bottom: 23px;
+}
+.marg-bot-6 {
+  margin-bottom: 6px;
+}
+.marg-bot-9 {
+  margin-bottom: 9px;
+}
+.marg-bot-17 {
+  margin-bottom: 9px;
+}
+.marg-bot-12 {
+  margin-bottom: 12px;
+}
+.marg-bot-18 {
+  margin-bottom: 18px;
+}
+.marg-bot-40 {
+  margin-bottom: 40px;
+}
+.marg-bot-41 {
+  margin-bottom: 41px;
+}
+.marg-bot-10 {
+  margin-bottom: 10px;
+}
+.marg-bot-11 {
+  margin-bottom: 11px;
+}
+.marg-bot-7 {
+  margin-bottom: 7px;
+}
+.marg-bot-37 {
+  margin-bottom: 37px;
+}
+.marg-bot-19 {
+  margin-bottom: 19px;
+}
+.marg-bot-50 {
+  margin-bottom: 50px;
+}
+
+
+// margin right
+.marg-right-110 {
+  margin-right: 110px;
+}
+
+// float left
+.left {
+  float: left;
+}
+
+.rigth {
+  float: right;
+}
+
+// add overflowe hidden to element
+.overflow {
+  overflow: hidden;
+}

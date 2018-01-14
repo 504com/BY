@@ -1,0 +1,49 @@
+/*
+    MONDE Bootstrap Sass Theme
+    Author: ItemBridge
+    Version: 0.0.1
+*/
+
+
+
+/* LAYOUTS - Page layout styles */
+@import '_layouts.scss';
+
+/* Typography */
+@import "_typography.scss";
+
+/* Style */
+@import "_background.scss";
+@import "_preload.scss";
+@import "_scrollStyler.scss";
+
+/* PLUGINS - all plugins */
+//@import '../component';
+//@import '../animations';
+//@import '../components';
+//@import '../responsiveslides';
+//@import '../fotorama';
+//@import '../owl.carousel';
+//@import '../jquery-ui';
+
+/* INVERSE VERSION */
+@import "inverse";
+
+
+.top-logotip {
+	width: 150px;
+	position: absolute;
+    top: 5.04%;
+    right: 0;
+    left: 0;
+    margin: auto;
+    z-index: 99999;
+    text-align: center;
+
+    img {
+    	width: 100%;
+    	height: auto;
+    }
+}
+                
+            

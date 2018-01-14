@@ -1,0 +1,410 @@
+body{
+  &.inverse {
+    background: rgba(0, 0, 0, 0.5) url(../img/inverse_bg.jpg) 50% 50% fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}
+
+.inverse {
+
+  .wrapp {
+    .preload-bg {
+      background-color: rgba(255, 255, 255, 1);
+    }
+    #loadPrecent {
+      color: #000;
+    }
+
+    &.done,
+    &.hide-preloader {
+      .preload-bg {
+        background-color: rgba(255, 255, 255, .8);
+      }
+    }
+  }
+
+  // heading
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: rgba(0, 0, 0, 1);
+  }
+  .main_block {
+    header {
+      h1 {
+        color: rgba(0, 0, 0, 1);
+      }
+    }
+  }
+
+  // paragraphs
+  p,
+  .main_block_text .info address {
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 500;
+  }
+
+  // links
+  a {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+
+    &:hover,
+    &:active {
+      color: rgba(0, 0, 0, 1)!important;
+    }
+
+    &:focus {
+      color: rgba(0, 0, 0, .5)!important;
+    }
+
+  }
+
+  // subscribe
+  .subscribe {
+    .subscribe-btn {
+      border: 1px solid rgba(0, 0, 0, 0.5);
+      color: rgba(0, 0, 0, 0.5);
+
+      &:hover,
+      &:active {
+        border: 1px solid rgba(0, 0, 0, 1);
+        color: rgba(0, 0, 0, 1)!important;
+      }
+    }
+
+    &.open {
+      border: 1px solid #000;
+    }
+
+    .subscribe-form input[type="email"],
+    .subscribe-form input[type="text"] {
+      color: #000;
+    }
+
+    .subscribe-form input[type="submit"],
+    .subscribe-form input[type="button"] {
+      border-color: #000;
+      background: #000 url("../img/send-white.svg") 50% 50% no-repeat;
+      background-size: 65%;
+    }
+  }
+
+  // main menu
+  .navbar-brand {
+    color: #000;
+  }
+
+  .nav{
+    >li {
+      >a{
+        &:hover {
+          color: rgba(0, 0, 0, 1);
+        }
+      }
+
+      &.active {
+        > a {
+          color: #000!important;
+        }
+      }
+    }
+  }
+
+  .navbar_share-icons{
+    > span {
+      color: rgba(0, 0, 0, 1);
+    }
+  }
+
+  .navbar {
+    min-height       : 80px;
+    background-color : rgba(255, 255, 255, 0.8);
+    border-top       : 1px solid transparent;
+
+    .navbar-header {
+      border-bottom : 1px solid transparent;
+    }
+
+    .navbar-brand {
+      height         : 80px;
+      line-height    : 0;
+      padding-top    : 40px;
+      padding-bottom : 40px;
+    }
+
+    .navbar-nav {
+      > li {
+        > a {
+          padding-top    : 40px;
+          padding-bottom : 40px;
+        }
+      }
+    }
+
+    .navbar_share-icons {
+      span {
+        padding-top    : 40px;
+        padding-bottom : 40px;
+      }
+
+      .navbar_icons {
+        height : 80px;
+        > ul {
+          height : auto;
+          > li {
+            height : 80px;
+          }
+        }
+      }
+    }
+
+    .navbar-toggle {
+      margin-top    : 25px;
+      margin-bottom : 25px;
+      border: none;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: transparent;
+      }
+    }
+
+    &.collapsed {
+
+      .navbar-nav {
+        > li {
+          > a {
+            padding-top    : 31px;
+            padding-bottom : 31px;
+          }
+        }
+      }
+
+      .navbar_share-icons {
+        span {
+          padding-top    : 30px;
+          padding-bottom : 30px;
+        }
+      }
+
+      &.open {
+        margin-bottom : -80px;
+      }
+    }
+
+    .navbar-toggle {
+      opacity: .5;
+
+      -webkit-transition : opacity .3s ease;
+      -moz-transition    : opacity .3s ease;
+      -ms-transition     : opacity .3s ease;
+      -o-transition      : opacity .3s ease;
+      transition         : opacity .3s ease;
+      .icon-bar {
+        background-color : rgba(0, 0, 0, 1);
+      }
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  nav {
+    &.collapsed {
+      .navbar_icons {
+        height: auto!important;
+        > ul {
+          > li {
+            height: auto!important;
+          }
+        }
+      }
+    }
+  }
+
+  .navbar_show-icons,
+  .fotorama--fullscreen .fotorama-info .fotorama_show-icons {
+    background: url("../img/share-black.svg") 50% 50% no-repeat;
+    background-size: 20px;
+  }
+
+  // main page
+
+  .main_block_text p.title-text,
+  .main_block_text .info address.title-text{
+    color: #000;
+  }
+
+  .category-group > li {
+    a {
+      svg {
+        fill : rgba(0, 0, 0, 0.5);
+      }
+      &:hover {
+        svg {
+          fill : rgba(0, 0, 0, 1);
+        }
+      }
+    }
+    &.active {
+      a {
+        svg {
+          fill : rgba(0, 0, 0, 1);
+        }
+      }
+    }
+  }
+
+  // carousel
+  .item .item-info .team-name {
+    color: #000;
+  }
+
+  // bottom
+  .bottom {
+    height: 80px;
+    background-color: #fff;
+    margin-top: -80px;
+
+    .close-this {
+      &::before {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+      &::after {
+        background-color: rgba(0, 0, 0, 0.6);
+      }
+
+      &:hover {
+        &::before {
+          background-color: rgba(0, 0, 0, 1);
+        }
+        &::after {
+          background-color: rgba(0, 0, 0, 1);
+        }
+      }
+    }
+  }
+
+  // stack
+  .stack__images li {
+    background: url("../img/app-black-bg.svg") 100% 100% no-repeat;
+  }
+
+  // scroll
+  .myScroll span {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .navbar-nav > li > a {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  // download buttons
+  .app-store,
+  .google-play {
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 1);
+    }
+  }
+
+  // info about app
+  .info-about-app .info-about-app_block {
+    height: -webkit-calc(100% - 100px);
+    height: -moz-calc(100% - 100px);
+    height: calc(100% - 100px);
+  }
+
+  // fotorama
+  .fotorama--fullscreen{
+    &.open {
+      background-color: #fff;
+    }
+  }
+
+  .fullscreen {
+    background-color: #fff;
+  }
+
+  .fotorama--fullscreen .fotorama__nav-wrap {
+    height: 80px;
+    background-color: #fff;
+  }
+
+  .fotorama--fullscreen .fotorama__nav,
+  .fotorama--fullscreen .fotorama__stage{
+    background-color: #fff!important;
+  }
+
+  .fotorama__stage__frame.fotorama__loaded--img.fotorama__active {
+    background-color: #fff;
+  }
+
+  .fotorama--fullscreen .fotorama-info .team-name {
+    color: #000!important;
+  }
+  .fotorama--fullscreen .fotorama-info .team-name .team-work {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .fotorama-style.size-320 .bottom {
+    margin-top: 0;
+    background-color: transparent;
+  }
+
+  // full canvas
+  .full-canvas {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .full-canvas.opened{
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  //buttons
+  button,
+  form input[type="button"],
+  form input[type="email"] {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  button:hover,
+  form input[type="button"]:hover,
+  form input[type="email"]:hover {
+    border-color: #000;
+    color: #000;
+  }
+
+  button:active,
+  form input[type="button"]:active,
+  form input[type="email"]:active {
+    border-color: #000;
+    background-color: #000;
+    color: #fff;
+  }
+
+  // bloquote
+
+  blockquote {
+
+    &:before {
+      background: url("../img/quote_inverse.png") top center no-repeat;
+      background-size: 100% 100%;
+      width: 14px;
+      height: 12px;
+    }
+
+    footer {
+      color: #000;
+    }
+
+  }
+
+
+}

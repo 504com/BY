@@ -1,0 +1,318 @@
+/* Preloader */
+
+.wrapp {
+  position           : absolute;
+  height             : 100%;
+  width              : 100%;
+  min-height         : 100%;
+  overflow           : hidden;
+
+  z-index            : 99999;
+
+  transform: scale(1);
+
+  will-change        : transform;
+
+  transition         : transform 1s cubic-bezier(.36, .78, .25, .99);
+
+  overflow: hidden;
+
+  .preload-bg {
+
+    display          : block;
+    position         : absolute;
+    left             : 0;
+    right            : 0;
+
+    width            : 100%;
+    height           : 100%;
+
+    background-color : rgba(0, 0, 0, 1);
+
+    z-index          : 99999;
+
+    transition: background-color 1s ease;
+
+    .preloaderWraper {
+
+      @extend .preload-bg;
+      background-color: transparent!important;
+
+      will-change : transform;
+
+      .scaleDiv {
+
+        display            : block;
+        position           : absolute;
+        left               : 0;
+        right              : 0;
+
+        width              : 100%;
+        height             : 100%;
+
+        will-change        : transform;
+        will-change        : -webkit-transform;
+
+        transform: scale(0.4);
+
+        transition         : transform 1.5s cubic-bezier(.17,.64,.3,.93), opacity 1.5s ease;
+
+        .mondePreloader {
+
+          will-change       : transform;
+
+          width             : 100%;
+          height            : 100%;
+
+          position          : absolute;
+          left              : 0;
+          right             : 0;
+
+          //background-color  : rgba(0,0,0,1);
+
+          animation         : spining 20s linear 0s infinite forwards; /* IE 10+, Fx 29+ */
+
+          &.opacity {
+            opacity: 0;
+          }
+
+          // &.stop {
+          //   -webkit-animation-play-state: paused;
+          //     -moz-animation-play-state: paused;
+          //     -o-animation-play-state: paused;
+          //     animation-play-state: paused;
+          // }
+
+        }
+
+        .timer {
+          top: 50%;
+          transform         : translateY(-50%);
+        }
+
+      }
+
+    }
+
+  }
+
+  #loadPrecent {
+    display     : block;
+    position    : absolute;
+    top         : 50%;
+    left        : 50%;
+    transform: translate(-50%, -50%);
+
+    will-change : transform;
+
+    z-index: 99999;
+  }
+
+  &.done {
+
+
+    z-index: 0;
+    z-index : -1\9;
+    z-index : -1\10;
+
+    // filter: blur(5px);
+
+    .preload-bg {
+
+      background-color : rgba(0, 0, 0, .6);
+
+      backface-visibility         : hidden;
+
+      .preloaderWraper {
+
+        background-color: transparent;
+
+        .scaleDiv {
+
+          transform: scale(2.8);
+          background-color: transparent;
+          opacity: 0.2;
+
+          .mondePreloader {
+
+            &.stop {
+              //animation-play-state: paused;
+              //animation-duration: 1000s;
+              -webkit-animation-play-state: paused;
+              -moz-animation-play-state: paused;
+              -o-animation-play-state: paused;
+              animation-play-state: paused;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  &.hide-preloader {
+    z-index: 0;
+    z-index : -1\9;
+    z-index : -1\10;
+
+    // filter: blur(5px);
+
+    .preload-bg {
+
+      background-color : rgba(0, 0, 0, .6);
+
+      backface-visibility         : hidden;
+
+      .preloaderWraper {
+
+        background-color: transparent;
+
+        .scaleDiv {
+
+          transform: scale(3);
+          background-color: transparent;
+          opacity: 0;
+
+          .mondePreloader {
+
+            &.stop {
+              -webkit-animation-play-state: paused;
+              -moz-animation-play-state: paused;
+              -o-animation-play-state: paused;
+              animation-play-state: paused;
+            }
+
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+.gradient-overlay {
+  .wrapp.hide-preloader {
+    .preload-bg {
+      background: rgba(0, 0, 0, .5);
+    }
+  }
+}
+
+@keyframes spining {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// default preloader
+
+@for $i from 1 through 6 {
+  @keyframes preload-show-#{$i}{
+    from{
+      transform: rotateZ(60* $i + deg) rotateY(-90deg) rotateX(0deg);
+      border-left-color: #000000;
+    }
+  }
+  @keyframes preload-hide-#{$i}{
+    to{
+      transform: rotateZ(60* $i + deg) rotateY(-90deg) rotateX(0deg);
+      border-left-color: #000000;
+    }
+  }
+
+  @keyframes preload-cycle-#{$i}{
+
+    $startIndex: $i*5;
+    $reverseIndex: (80 - $i*5);
+
+    #{$startIndex * 1%}{
+      transform: rotateZ(60* $i + deg) rotateY(90deg) rotateX(0deg);
+      border-left-color: #000000;
+    }
+    #{$startIndex + 5%},
+    #{$reverseIndex * 1%}{
+      transform: rotateZ(60* $i + deg) rotateY(0) rotateX(0deg);
+      border-left-color: #333333;
+    }
+
+    #{$reverseIndex + 5%},
+    100%{
+      transform: rotateZ(60* $i + deg) rotateY(90deg) rotateX(0deg);
+      border-left-color: #000000;
+    }
+  }
+}
+
+@keyframes preload-flip{
+  0%{
+    transform: rotateY(0deg) rotateZ(-60deg);
+  }
+  100%{
+    transform: rotateY(360deg) rotateZ(-60deg);
+  }
+}
+
+.default-preloader{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  display: block;
+  width: 3.75em;
+  height: 4.25em;
+  margin-left: -1.875em;
+  margin-top: -2.125em;
+
+  transform-origin         : center center;
+
+  transform         : rotateY(180deg) rotateZ(-60deg);
+
+  &.opacity {
+    opacity: 0;
+    visibility: visible;
+
+    transition         : opacity .5s .5s ease;
+  }
+
+  .slice{
+    border-top: 1.125em solid transparent;
+    border-right: none;
+    border-bottom: 1em solid transparent;
+    border-left: 1.875em solid #f7484e;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform-origin: left bottom;
+    border-radius: 3px 3px 0 0;
+  }
+
+  @for $i from 1 through 6 {
+    .slice:nth-child(#{$i}) {
+      transform: rotateZ(60* $i + deg) rotateY(0deg) rotateX(0);
+      animation: .15s linear .9 - $i*.08s preload-hide-#{$i} both 1;
+    }
+  }
+
+
+  &.loading{
+    animation: 2s preload-flip steps(2) infinite both;
+    @for $i from 1 through 6 {
+      .slice:nth-child(#{$i}) {
+        transform: rotateZ(60* $i + deg) rotateY(90deg) rotateX(0);
+        animation: 2s preload-cycle-#{$i} linear infinite both;
+      }
+    }
+  }
+
+}
