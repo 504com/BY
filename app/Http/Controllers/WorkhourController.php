@@ -13,7 +13,7 @@ class WorkhourController extends Controller
 {
     public function show($id)
     {
-    	return Workhour::where('restaurant_id', $id)->get();
+        return Workhour::where('restaurant_id', $id)->get();
     }
 
     public function index($id, $day, Request $request)
@@ -31,8 +31,8 @@ class WorkhourController extends Controller
     public function getBookingHours(Carbon $date, Collection $workhours, $bookingDuration)
     {
         return $workhours->map(function ($workhour) use ($bookingDuration, $date) {
-            $start = Carbon::createFromFormat('H:i:s', $workhour->start);
-            $end = Carbon::createFromFormat('H:i:s', $workhour->end);
+            $start = Carbon::createFromFormat('H:i', $workhour->start);
+            $end = Carbon::createFromFormat('H:i', $workhour->end);
             $bookingHours = 0;
             $hours = [];
 
@@ -42,7 +42,7 @@ class WorkhourController extends Controller
 
             while ($start < $end) {
                 if ($start->diffInMinutes($end) > 30) {
-                    $hours[] = Carbon::createFromFormat('d/m/Y H:i:s', $date->format('d/m/Y') . ' ' .$workhour->start)->addMinutes($bookingDuration * $bookingHours);
+                    $hours[] = Carbon::createFromFormat('d/m/Y H:i', $date->format('d/m/Y') . ' ' .$workhour->start)->addMinutes($bookingDuration * $bookingHours);
                     ++$bookingHours;
                 }
                 $start->addMinutes($bookingDuration);

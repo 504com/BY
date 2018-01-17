@@ -93,6 +93,7 @@ Route::group(['domain' => config('url.restaurant')], function()
 Route::group(['domain' => config('url.front')], function()
 {
     Route::get('/', ['uses' => 'DefaultController@index', 'as' => 'home']);
+    Route::resource('bookings', 'ClientBookingController');
     Route::get('/products/{id}', ['uses' => 'ProductController@show', 'as' => 'products.show'])->middleware('cors');
     Route::get('/workhours/{id}', ['uses' => 'WorkhourController@show', 'as' => 'workhours.show'])->middleware('cors');
     Route::get('/workhours/{id}/day/{day}', ['uses' => 'WorkhourController@index','as' => 'workhours.index']);
@@ -113,6 +114,7 @@ Route::group(['domain' => config('url.front')], function()
         Route::get('/restaurants/{slug}', ['uses' => 'RestaurantController@find', 'as' => 'restaurants.show']);
         Route::get('/restaurants/{id}/tables/availabilities', ['uses' => 'RestaurantController@checkAvailabilities', 'as' => 'tables-availabilities']);
         Route::resource('restaurants.bookings', 'BookingController');
+        Route::get('/restaurants/bookings/destroy/{id}', ['uses' => 'BookingController@destroy', 'as' => 'restaurant.bookings.destroy'])->where('id', '[0-9]+');
         Route::resource('restaurants.categories', 'CategoryController');
         Route::resource('restaurants.services', 'ServiceController');
         Route::resource('restaurants.payments', 'PaymentController');

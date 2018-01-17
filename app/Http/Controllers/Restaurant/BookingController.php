@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Restaurant;
 
 use App\Models\Booking;
-use App\Models\Order;
-use App\Models\Service;
 use App\Models\Workhour;
 use App\Repositories\BookingRepository;
 use App\Repositories\OrderRepository;
@@ -35,6 +33,22 @@ class BookingController extends Controller
     }
 
     /**
+     * Show the form for editing a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $contents = FrontContent::first();
+        $bookings = Booking::all();
+
+        return view('pages.cutomer.home', [
+            'contents' => $contents,
+            'bookings' => $bookings
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -42,7 +56,62 @@ class BookingController extends Controller
     public function create($slug)
     {
         $restaurant = Restaurant::where('slug', $slug)->first();
-        return view('pages.booking.create', ['restaurant' => $restaurant]);
+        return view('pages.booking.create', ['restaurant' => $restaurant , 'userLastname' => Auth::user()->lastname]);
+    }
+
+
+    /**
+     * Show the form for editing a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($restaurantId, $bookingId)
+    {
+        $restaurant = Restaurant::where('id', $restaurantId)->first();
+        $booking = Booking::find($bookingId);
+        $workhour = Workhour::where('restaurant_id', $restaurantId)->get();
+
+        return view('pages.booking.edit', ['restaurant' => $restaurant , 'booking' => $booking, 'workhours' => $workhour, 'userLastname' => Auth::user()->lastname]);
+    }
+
+    /**
+     *  * Update an existing resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update($slug, $bookingId, Request $request)
+    {
+        $validator = $this->validator($request->all());
+        if ($validator->fails())
+        {
+            return back()->withInput()->withErrors($validator);
+        }
+
+        $restaurant = Restaurant::where('slug', $slug)->first();
+        $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('bookingDate') . ' ' . $request->get('time'), config('app.timezone'));
+        $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('bookingDate') . ' ' . $request->get('time'), config('app.timezone'))
+            ->addHours($restaurant->booking_duration);
+
+        /** @var BookingStrategy $bookingStrategy */
+        $bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
+        $capacity = $bookingStrategy->getRestaurantCapacity($restaurant, $startHour, $endHour);
+
+        $guests = 0;
+
+        if ($bookingStrategy instanceof BookingOnWeekend) {
+            $guests += $bookingStrategy->increaseCapacity($request->guests);
+        }
+
+        if ($request->guests > $capacity + $guests)
+        {
+            $validator->errors()->add('date', 'Aucune table disponible à cette heure là');
+            return back()->withInput()->withErrors($validator);
+        }
+        $booking = $this->updateBooking($bookingId, $request, $startHour, $endHour);
+
+        $this->sendEmail($restaurant, $booking);
+
+        return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été modifiée');
     }
 
     /**
@@ -107,6 +176,37 @@ class BookingController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  string $slug
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllUserBooking($organizer)
+    {
+        $booking = Booking::where('organizer', $organizer);
+        return view('pages.booking.show', [
+            'booking' => $booking
+        ]);
+    }
+
+    /**
+     * Delete  an existing resource in storage.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $booking = Booking::find($id);
+        $booking->delete();
+
+        $bookings = Booking::all();
+        return view('pages.customer.home', [
+            'bookings' => $bookings
+        ]);
+    }
+
     private function sendEmail($restaurant, $booking)
     {
         $beautymail = app()->make(Beautymail::class);
@@ -125,21 +225,36 @@ class BookingController extends Controller
         return DB::transaction(function () use ($request, $startHour, $endHour)
         {
             $order = null;
-
             if ($request->has('with_order')) {
                 $order = $this->order->createOrder($request->all(), $startHour, Auth::user()->id);
                 $products = array_combine($request->get('products'), $request->get('quantities'));
                 $this->order->createOrderLines($order, $products);
             }
-
-            return $this->booking->create($request->all(), $startHour, $endHour, $order);
+            return $this->booking->create($request->all(), Auth::user()->lastname, $startHour, $endHour, $order);
         });
     }
+
+    private function updateBooking($bookingId, $request, $startHour, $endHour)
+    {
+        $booking = Booking::find($bookingId);
+        return DB::transaction(function () use ($booking, $request, $startHour, $endHour)
+        {
+            $order = $booking->order_id ? Order::find($booking->order_id) : null;
+            if ($request->has('with_order')) {
+                $order = $this->order->updateOrder($order, $request->all(), $startHour, Auth::user()->id);
+                $products = array_combine($request->get('products'), $request->get('quantities'));
+                $this->order->updateOrderLines($order, $products);
+            }
+
+            return $this->booking->update($booking, $request->all(), $startHour, $endHour, $order);
+        });
+    }
+
+
 
     private function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required',
             'guests' => 'required|integer|min:1',
             'date' => 'required',
             'date_submit' => 'date|date_format:Y-m-d',

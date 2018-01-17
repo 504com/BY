@@ -52,6 +52,13 @@
                                         <div class="form-register">
                                             <form method="post" action="{{ route('register-submit') }}">
                                                 {{ csrf_field() }}
+                                                <div class="form-group @if($errors->has('lastname')) has-error @endif">
+                                                    <input name="lastname" type="lastname" id="lastname" class="form-control" value="{{ old('lastname') }}" placeholder="{{ trans('form.lastname-placeholder') }}">
+                                                    <label for="username">{{ trans('form.lastname') }}</label>
+                                                    @if($errors->has('lastname'))
+                                                        <p class="help-block">{{ $errors->first('lastname') }}</p>
+                                                    @endif
+                                                </div>
                                                 <div class="form-group @if($errors->has('email')) has-error @endif">
                                                     <input name="email" type="email" id="email" class="form-control" value="{{ old('email') }}" placeholder="{{ trans('form.email-placeholder') }}">
                                                     <label for="username">{{ trans('form.email') }}</label>

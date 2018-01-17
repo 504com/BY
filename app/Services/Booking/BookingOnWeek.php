@@ -27,7 +27,7 @@ class BookingOnWeek implements BookingStrategy
             ->orWhere('end', '<', '03:00:00')
             ->orderBy('start')
             ->first();
-
+        \Log::info('$day: '.$day.'$startHour '.$startHour);
         $startTime = explode(':', $workhour->start);
         $endTime = explode(':', $workhour->end);
 

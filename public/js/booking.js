@@ -1,4 +1,12 @@
 $(function() {
+    if($('input[name="bookingDayNumber"]') &&  $('input[name="id"]') && $('input[name="bookingDate"]')){
+        url = laroute.route('workhours.index', {id: $('input[name="id"]').val(), day: $('input[name="bookingDayNumber"]').val()});
+        $.get(url, {
+            date: $('input[name="bookingDate"]').val()
+        }, function (data) {
+            $('select[name="time"]').html(data);
+        });
+    }
     let options = {
         monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
@@ -26,7 +34,12 @@ $(function() {
             $(document.activeElement).blur();
         }
     };
-	if ($(location).attr('pathname').substr(-15) == 'bookings/create') {
+    pathname = $(location).attr('pathname').substr(-15);
+	if (pathname == 'bookings/create') {
 		$('input[name="date"]').pickadate(options);
 	}
+    regexEditeBooking = new RegExp('bookings/[0-9]/edit');
+    if (regexEditeBooking.test(pathname)) {
+        $('input[name="date"]').pickadate(options);
+    }
 });

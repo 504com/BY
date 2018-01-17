@@ -7,5 +7,6 @@ return [
     'choose' => 'Choisissez un restaurant',
     'pay' => 'Payez par carte, en espèces ou paypal',
     'new' => 'Les nouveaux',
+    'booking' => 'Mes réservations',
     'rated' => 'Les mieux notés'
 ];

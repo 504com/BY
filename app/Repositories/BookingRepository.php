@@ -16,18 +16,33 @@ class BookingRepository
      * @param Order|null $order
      * @return Booking
      */
-    public function create(array $data, \DateTime $startHour, $endHour, $order)
+    public function create(array $data, $lastename, \DateTime $startHour, $endHour, $order)
     {
         $orderId = $order ? $order->id : null;
 
         $booking = Booking::create([
-            'organizer' => $data['name'],
+            'organizer' =>  $lastename,
             'guests' => $data['guests'],
             'phone' => $data['phone'],
             'start' => $startHour,
             'end' => $endHour,
 			'details' => $data['details'],
             'restaurant_id' => $data['id'],
+            'order_id' => $orderId,
+        ]);
+
+        return $booking;
+    }
+
+    public function update($booking, array $data, \DateTime $startHour, $endHour, $order)
+    {
+        $orderId = $order ? $order->id : null;
+        $booking->save([
+            'guests' => $data['guests'],
+            'phone' => $data['phone'],
+            'start' => $startHour,
+            'end' => $endHour,
+            'details' => $data['details'],
             'order_id' => $orderId,
         ]);
 
