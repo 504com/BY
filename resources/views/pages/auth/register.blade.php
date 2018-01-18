@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="form-group @if($errors->has('email')) has-error @endif">
                                         <input name="email" type="email" id="email" class="form-control" value="{{ old('email') }}" placeholder="{{ trans('form.email-placeholder') }}">
-                                        <label for="username">{{ trans('form.email') }}</label>w
+                                        <label for="username">{{ trans('form.email') }}</label>
                                         @if($errors->has('email'))
                                             <p class="help-block">{{ $errors->first('email') }}</p>
                                         @endif
