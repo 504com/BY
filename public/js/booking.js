@@ -38,8 +38,9 @@ $(function() {
 	if (pathname == 'bookings/create') {
 		$('input[name="date"]').pickadate(options);
 	}
-    regexEditeBooking = new RegExp('bookings/[0-9]/edit');
+    regexEditeBooking = new RegExp('*[0-9]/bookings/edit');
     if (regexEditeBooking.test(pathname)) {
+
         $('input[name="date"]').pickadate(options);
     }
 });

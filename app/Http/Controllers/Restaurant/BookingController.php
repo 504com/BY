@@ -65,11 +65,11 @@ class BookingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($restaurantId, $bookingId)
+    public function edit($bookingId)
     {
-        $restaurant = Restaurant::where('id', $restaurantId)->first();
         $booking = Booking::find($bookingId);
-        $workhour = Workhour::where('restaurant_id', $restaurantId)->get();
+        $restaurant = Restaurant::where('id', $booking->restaurant_id)->first();
+        $workhour = Workhour::where('restaurant_id', $restaurant->id)->get();
 
         return view('pages.booking.edit', ['restaurant' => $restaurant , 'booking' => $booking, 'workhours' => $workhour, 'userLastname' => Auth::user()->lastname]);
     }

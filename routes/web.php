@@ -114,7 +114,8 @@ Route::group(['domain' => config('url.front')], function()
         Route::get('/restaurants/{slug}', ['uses' => 'RestaurantController@find', 'as' => 'restaurants.show']);
         Route::get('/restaurants/{id}/tables/availabilities', ['uses' => 'RestaurantController@checkAvailabilities', 'as' => 'tables-availabilities']);
         Route::resource('restaurants.bookings', 'BookingController');
-        Route::get('/restaurants/bookings/destroy/{id}', ['uses' => 'BookingController@destroy', 'as' => 'restaurant.bookings.destroy'])->where('id', '[0-9]+');
+        Route::get('/restaurants/booking/destroy/{id}', ['uses' => 'BookingController@destroy', 'as' => 'restaurant.bookings.destroy'])->where('id', '[0-9]+');
+        Route::get('/restaurants/{id}/booking/edit', ['uses' => 'BookingController@edit', 'as' => 'restaurant.bookings.edit'])->where('id', '[0-9]+');
         Route::resource('restaurants.categories', 'CategoryController');
         Route::resource('restaurants.services', 'ServiceController');
         Route::resource('restaurants.payments', 'PaymentController');
