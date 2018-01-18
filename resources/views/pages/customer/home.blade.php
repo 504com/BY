@@ -42,8 +42,8 @@
                                     <td>{{ date('d/m/Y à H\hi', strtotime($booking->start)) }}</td>
                                     <td>{{ $booking->guests }}</td>
                                     <td>
-                                        <a href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small  btn-colored-create">Modifier</a>
-                                        <a href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small btn-colored-create">Annuler</a>
+                                        <a href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small  btn-colored-update">Modifier</a>
+                                        <a href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small btn-colored-update">Annuler</a>
                                     </td>
                                 </tr>
                             @endforeach

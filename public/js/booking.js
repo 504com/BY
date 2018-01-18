@@ -1,11 +1,16 @@
 $(function() {
-    if($('input[name="bookingDayNumber"]') &&  $('input[name="id"]') && $('input[name="bookingDate"]')){
+    bookingDayNumber = $('input[name="bookingDayNumber"]').val();
+    id = $('input[name="id"]').val();
+    bookingDate = $('input[name="bookingDate"]').val();
+
+    if(typeof  bookingDayNumber != 'undefined' &&  typeof id != 'undefined'  && typeof bookingDate != 'undefined' ){
         url = laroute.route('workhours.index', {id: $('input[name="id"]').val(), day: $('input[name="bookingDayNumber"]').val()});
         $.get(url, {
             date: $('input[name="bookingDate"]').val()
         }, function (data) {
             $('select[name="time"]').html(data);
         });
+        $(document.activeElement).blur();
     }
     let options = {
         monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
@@ -38,9 +43,8 @@ $(function() {
 	if (pathname == 'bookings/create') {
 		$('input[name="date"]').pickadate(options);
 	}
-    regexEditeBooking = new RegExp('*[0-9]/bookings/edit');
+    regexEditeBooking = new RegExp('booking/edit');
     if (regexEditeBooking.test(pathname)) {
-
         $('input[name="date"]').pickadate(options);
     }
 });

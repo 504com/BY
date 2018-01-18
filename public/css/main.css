@@ -1608,6 +1608,13 @@ input[class="btn-ghost"]:after {
     font-size: 0.75em;
 }
 
+.btn-colored-update{
+    background: #0b0b0b;
+}
+.btn-colored-update:hover{
+    background: #0b0b0b;
+}
+
 /* ---- 2.6 Light Buttons ---- */
 .btn-light {
     background: #fff;
@@ -10566,8 +10573,8 @@ h1, .comingsoon .content-wrapper .content-inner .cs-timer .item .nbr-timer{
 	background: #EA4D4D;
 }
 .btn-colored-create:hover{
-	background: #C42525;
-}
+     background: #C42525;
+ }
 .btn-colored:after{
 	background: #EA4D4D;
 }

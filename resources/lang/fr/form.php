@@ -3,6 +3,7 @@
 return [
     'firstname' => 'Prénom',
     'lastname' => 'Nom',
+    'lastname-placeholder' => 'Nom',
     'email' => 'Email',
     'email-placeholder' => 'Adresse e-mail',
     'password' => 'Mot de passe',

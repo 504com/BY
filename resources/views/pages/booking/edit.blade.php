@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-group @if($errors->has('date') || $errors->has('date_submit'))has-error @endif">
                                 <input data-url="{{ route('workhours.show', ['id' => $restaurant->id]) }}"
-                                       class="form-control" type="text" name="date" id="date" value="@if(!is_null($booking)) {{$booking->start->format('d F, Y')}} @endif">
+                                       class="form-control" type="text" name="date" id="date" value="@if(!is_null($booking)) {{$booking->start->format('d/m/Y')}} @endif">
                                 <label for="date">Date <em>*</em></label>
                             </div>
                             <div class="form-group @if($errors->has('time'))has-error @endif">

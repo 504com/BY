@@ -109,7 +109,7 @@ class BookingController extends Controller
         }
         $booking = $this->updateBooking($bookingId, $request, $startHour, $endHour);
 
-        $this->sendEmail($restaurant, $booking);
+        $this->sendEmail($restaurant, $booking, 'Modification de réservation');
 
         return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été modifiée');
     }
@@ -153,7 +153,7 @@ class BookingController extends Controller
 
         $booking = $this->save($request, $startHour, $endHour);
 
-		$this->sendEmail($restaurant, $booking);
+		$this->sendEmail($restaurant, $booking, 'Confirmation de réservation');
 
         return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été validée');
     }
@@ -207,16 +207,16 @@ class BookingController extends Controller
         ]);
     }
 
-    private function sendEmail($restaurant, $booking)
+    private function sendEmail($restaurant, $booking, $msg)
     {
         $beautymail = app()->make(Beautymail::class);
 
-        $beautymail->send('emails.booking', ['restaurant' => $restaurant,'booking' => $booking], function($message) use ($booking)
+        $beautymail->send('emails.booking', ['restaurant' => $restaurant,'booking' => $booking], function($message) use ($booking, $msg)
         {
             $message
                 ->from(config('mail.from.address'))
                 ->to(Auth::user()->email, $booking->organizer)
-                ->subject('Confirmation de réservation');
+                ->subject($msg);
         });
     }
 
