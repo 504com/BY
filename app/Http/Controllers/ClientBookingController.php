@@ -17,7 +17,7 @@ class ClientBookingController extends Controller
 
     public function index()
     {
-        $bookings = Booking::where('organizer', Auth::user()->lastname)->get();
+        $bookings = Booking::where('organizer', Auth::user()->id)->get();
         return view('pages.customer.home', [
             'bookings' => $bookings
 		]);

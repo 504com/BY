@@ -2,7 +2,7 @@
 
 @section('content')
 	@include('beautymail::templates.widgets.articleStart')
-		<h4 class="secondary"><strong>Réservation pour {{ $booking->guests }} personnes</strong></h4>
+		<h4 class="secondary"><strong>Votre réservation a été annulée</strong></h4>
 		<div>
 			<h4>Nom de la réservation</h4>
 			<p>{{ $userLastname }}</p>

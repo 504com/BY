@@ -48,11 +48,11 @@
 	                <div id="navbar" class="navbar-collapse collapse">
                         <div v-cloak>
     	                    <ul class="nav navbar-nav navbar-right">
+								<li>
+									<a href="{{ route('bookings.index') }}"><i class="fa fa-sign-out"></i> {{ trans('home.booking') }}
+									</a>
+								</li>
     	                        @if(Auth::check())
-									<li>
-										<a href="{{ route('bookings.index') }}"><i class="fa fa-sign-out"></i> {{ trans('home.booking') }}
-										</a>
-									</li>
     	                            <li>
     	                                <a href="{{ route('logout') }}"><i class="fa fa-sign-out"></i> {{ trans('auth.logout') }}
     	                                </a>

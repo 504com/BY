@@ -16,12 +16,12 @@ class BookingRepository
      * @param Order|null $order
      * @return Booking
      */
-    public function create(array $data, $lastename, \DateTime $startHour, $endHour, $order)
+    public function create(array $data, $userId, \DateTime $startHour, $endHour, $order)
     {
         $orderId = $order ? $order->id : null;
 
         $booking = Booking::create([
-            'organizer' =>  $lastename,
+            'organizer' =>  $userId,
             'guests' => $data['guests'],
             'phone' => $data['phone'],
             'start' => $startHour,
@@ -36,8 +36,10 @@ class BookingRepository
 
     public function update($booking, array $data, \DateTime $startHour, $endHour, $order)
     {
+        \Log::info('bookingId::::::'.$booking->id.' data request: '. $data['guests'].' start: '.$startHour.' end: '.$endHour.' ');
         $orderId = $order ? $order->id : null;
-        $booking->save([
+        $booking->update([
+            'id' => $booking->id,
             'guests' => $data['guests'],
             'phone' => $data['phone'],
             'start' => $startHour,

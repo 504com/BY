@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Restaurant;
 
 use App\Models\Booking;
+use App\Models\Order;
+use App\Models\Service;
+use App\Models\User;
 use App\Models\Workhour;
 use App\Repositories\BookingRepository;
 use App\Repositories\OrderRepository;
@@ -33,22 +36,6 @@ class BookingController extends Controller
     }
 
     /**
-     * Show the form for editing a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $contents = FrontContent::first();
-        $bookings = Booking::all();
-
-        return view('pages.cutomer.home', [
-            'contents' => $contents,
-            'bookings' => $bookings
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -56,9 +43,8 @@ class BookingController extends Controller
     public function create($slug)
     {
         $restaurant = Restaurant::where('slug', $slug)->first();
-        return view('pages.booking.create', ['restaurant' => $restaurant , 'userLastname' => Auth::user()->lastname]);
+        return view('pages.booking.create', ['restaurant' => $restaurant,  'userLastname' => Auth::user()->lastname]);
     }
-
 
     /**
      * Show the form for editing a new resource.
@@ -109,7 +95,7 @@ class BookingController extends Controller
         }
         $booking = $this->updateBooking($bookingId, $request, $startHour, $endHour);
 
-        $this->sendEmail($restaurant, $booking, 'Modification de réservation');
+        $this->sendEmail($restaurant, $booking, 'Modification de réservation', 'emails.booking');
 
         return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été modifiée');
     }
@@ -130,13 +116,13 @@ class BookingController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-        $restaurant = Restaurant::where('slug', $slug)->first();
-        $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
-        $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
+		$restaurant = Restaurant::where('slug', $slug)->first();
+		$startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
+		$endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
             ->addHours($restaurant->booking_duration);
 
-        /** @var BookingStrategy $bookingStrategy */
-        $bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
+		/** @var BookingStrategy $bookingStrategy */
+		$bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
         $capacity = $bookingStrategy->getRestaurantCapacity($restaurant, $startHour, $endHour);
 
         $guests = 0;
@@ -145,15 +131,21 @@ class BookingController extends Controller
             $guests += $bookingStrategy->increaseCapacity($request->guests);
         }
 
-        if ($request->guests > $capacity + $guests)
-        {
-            $validator->errors()->add('date', 'Aucune table disponible à cette heure là');
-            return back()->withInput()->withErrors($validator);
-        }
+		if ($request->guests > $capacity + $guests)
+		{
+			$validator->errors()->add('date', 'Aucune table disponible à cette heure là');
+			return back()->withInput()->withErrors($validator);
+		}
 
         $booking = $this->save($request, $startHour, $endHour);
 
-		$this->sendEmail($restaurant, $booking, 'Confirmation de réservation');
+        /** updating user name**/
+        $user = User::find(Auth::user()->id);
+        $user->update([
+            'lastname' => $request->get('name'),
+        ]);
+
+		$this->sendEmail($restaurant, $booking, 'Confirmation de réservation', 'emails.booking');
 
         return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été validée');
     }
@@ -176,22 +168,7 @@ class BookingController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  string $slug
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllUserBooking($organizer)
-    {
-        $booking = Booking::where('organizer', $organizer);
-        return view('pages.booking.show', [
-            'booking' => $booking
-        ]);
-    }
-
-    /**
+    /**w
      * Delete  an existing resource in storage.
      *
      * @return \Illuminate\Http\Response
@@ -199,7 +176,10 @@ class BookingController extends Controller
     public function destroy($id)
     {
         $booking = Booking::find($id);
+        $restaurant = Restaurant::where('id', $booking->restaurant_id)->first();
         $booking->delete();
+
+        $this->sendEmail($restaurant, $booking, 'Annulation de réservation','emails.cancelbooking');
 
         $bookings = Booking::all();
         return view('pages.customer.home', [
@@ -207,12 +187,13 @@ class BookingController extends Controller
         ]);
     }
 
-    private function sendEmail($restaurant, $booking, $msg)
+    private function sendEmail($restaurant, $booking, $msg, $template)
     {
         $beautymail = app()->make(Beautymail::class);
-
-        $beautymail->send('emails.booking', ['restaurant' => $restaurant,'booking' => $booking], function($message) use ($booking, $msg)
+        $userLastname = (Auth::user()->lastname != null) ? Auth::user()->lastname : $booking->organizer;
+        $beautymail->send($template, ['restaurant' => $restaurant,'booking' => $booking, 'userLastname' => $userLastname], function($message) use ($booking, $msg)
         {
+
             $message
                 ->from(config('mail.from.address'))
                 ->to(Auth::user()->email, $booking->organizer)
@@ -230,7 +211,7 @@ class BookingController extends Controller
                 $products = array_combine($request->get('products'), $request->get('quantities'));
                 $this->order->createOrderLines($order, $products);
             }
-            return $this->booking->create($request->all(), Auth::user()->lastname, $startHour, $endHour, $order);
+            return $this->booking->create($request->all(), Auth::user()->id, $startHour, $endHour, $order);
         });
     }
 
@@ -245,7 +226,6 @@ class BookingController extends Controller
                 $products = array_combine($request->get('products'), $request->get('quantities'));
                 $this->order->updateOrderLines($order, $products);
             }
-
             return $this->booking->update($booking, $request->all(), $startHour, $endHour, $order);
         });
     }
@@ -255,6 +235,7 @@ class BookingController extends Controller
     private function validator(array $data)
     {
         return Validator::make($data, [
+            'name' => 'required',
             'guests' => 'required|integer|min:1',
             'date' => 'required',
             'date_submit' => 'date|date_format:Y-m-d',

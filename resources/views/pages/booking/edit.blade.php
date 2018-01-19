@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-offset-2 col-md-4">
                             <div class="form-group @if($errors->has('name'))has-error @endif">
-                                <input disabled="true" name="name" type="text" class="form-control" id="name" value="{{ $userLastname }}">
+                                <input name="name" type="text" class="form-control" id="name" value="{{ $userLastname }}">
                                 <label for="name">Nom <em>*</em></label>
                             </div>
                             <div class="form-group @if($errors->has('date') || $errors->has('date_submit'))has-error @endif">
@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group @if($errors->has('time'))has-error @endif">
                                 <select class="form-control" name="time" id="time">
-                                        <option>Chargement heure de réservation</option>
+                                        <option>Chargement des horaires disponibles</option>
                                 </select>
                                 <label for="time">Heure <em>*</em></label>
                             </div>
