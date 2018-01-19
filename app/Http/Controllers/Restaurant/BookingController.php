@@ -130,13 +130,13 @@ class BookingController extends Controller
             return back()->withInput()->withErrors($validator);
         }
 
-		$restaurant = Restaurant::where('slug', $slug)->first();
-		$startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
-		$endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
+        $restaurant = Restaurant::where('slug', $slug)->first();
+        $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
+        $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
             ->addHours($restaurant->booking_duration);
 
-		/** @var BookingStrategy $bookingStrategy */
-		$bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
+        /** @var BookingStrategy $bookingStrategy */
+        $bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
         $capacity = $bookingStrategy->getRestaurantCapacity($restaurant, $startHour, $endHour);
 
         $guests = 0;
@@ -145,11 +145,11 @@ class BookingController extends Controller
             $guests += $bookingStrategy->increaseCapacity($request->guests);
         }
 
-		if ($request->guests > $capacity + $guests)
-		{
-			$validator->errors()->add('date', 'Aucune table disponible à cette heure là');
-			return back()->withInput()->withErrors($validator);
-		}
+        if ($request->guests > $capacity + $guests)
+        {
+            $validator->errors()->add('date', 'Aucune table disponible à cette heure là');
+            return back()->withInput()->withErrors($validator);
+        }
 
         $booking = $this->save($request, $startHour, $endHour);
 

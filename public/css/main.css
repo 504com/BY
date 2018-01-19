@@ -1600,19 +1600,14 @@ input[class="btn-ghost"]:after {
 .btn-small {
     padding: 6px 33px;
     font-size: 0.75em;
+    margin-left: 20px;
 }
 
 
 .btn-very-small {
     padding: 2px 10px;
+    margin-left: 20px;
     font-size: 0.75em;
-}
-
-.btn-colored-update{
-    background: #0b0b0b;
-}
-.btn-colored-update:hover{
-    background: #0b0b0b;
 }
 
 /* ---- 2.6 Light Buttons ---- */
