@@ -181,7 +181,7 @@ class BookingController extends Controller
 
         $this->sendEmail($restaurant, $booking, 'Annulation de réservation','emails.cancelbooking');
 
-        $bookings = Booking::all();
+        $bookings = Booking::where('organizer', Auth::user()->id)->get();
         return view('pages.customer.home', [
             'bookings' => $bookings
         ]);
