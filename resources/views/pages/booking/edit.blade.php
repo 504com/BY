@@ -70,7 +70,7 @@
                             </div>
                             <div class="form-group @if($errors->has('guests'))has-error @endif">
                                 <input name="guests"  min="1" class="form-control"
-                                       type="number" id="guests" value="@if(!is_null($booking)) {{$booking->guests}} @else {{ old('guests') }}  @endif">
+                                       type="text" id="guests" value="@if(!is_null($booking)) {{$booking->guests}} @else {{ old('guests') }}  @endif">
                                 <label for="guests">Nombre de couverts <em>*</em></label>
                             </div>
                             <div class="form-group">

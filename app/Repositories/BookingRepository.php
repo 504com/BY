@@ -40,7 +40,7 @@ class BookingRepository
         $orderId = $order ? $order->id : null;
         $booking->update([
             'id' => $booking->id,
-            'guests' => $data['guests'],
+            'guests' => (int)$data['guests'],
             'phone' => $data['phone'],
             'start' => $startHour,
             'end' => $endHour,
