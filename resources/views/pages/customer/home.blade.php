@@ -22,28 +22,26 @@
                 <div class="box-body table-responsive">
                     <table class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
                         <thead>
-                        <th>#</th>
-                        <th>Date réservée</th>
-                        <th>Personnes</th>
-                        <th>Action</th>
+                        <th>Détail </th>
+                        <th><div>Modifier / Annuler</div></th>
                         </thead>
                         <tbody>
                         @if (count($bookings) === 0 )
                             <tr>
                                 <td></td>
                                 <td><span class="label label-danger">Aucune réservation enregistrée</span></td>
-                                <td></td>
-                                <td></td>
                             </tr>
                         @else
                             @foreach($bookings as $booking)
                                 <tr>
-                                    <td>{{ \App\Models\Restaurant::where('id', $booking->restaurant_id)->first()->slug }}</td>
-                                    <td>{{ date('d/m/Y à H\hi', strtotime($booking->start)) }}</td>
-                                    <td>{{ $booking->guests }}</td>
                                     <td>
-                                        <a  href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small">Modifier</a>
-                                        <a  href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small">Annuler</a>
+                                        <div>{{ \App\Models\Restaurant::where('id', $booking->restaurant_id)->first()->name }}</div>
+                                        <div>{{ date('d/m/Y à H\hi', strtotime($booking->start)) }}</div>
+                                        <div>{{ $booking->guests }} personne(s)</div>
+                                    </td>
+                                    <td>
+                                        <div style="margin: 0px 0px 10px 5px"><a  href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small">Modifier</a></div>
+                                        <div style="margin: 0px 0px 10px 5px"><a  href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small">Annuler</a></div>
                                     </td>
                                 </tr>
                             @endforeach

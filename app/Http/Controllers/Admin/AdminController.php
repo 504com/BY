@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use Carbon\Carbon;
-use App\Models\Booking;
-use App\Models\Restaurant;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -28,6 +26,11 @@ class AdminController extends Controller
 		$guests = $restaurant->bookings()->where('start', '>=', $today)->where('start', '<', $tomorrow)->where('start', '>=', $startHour)->where('start', '<=', $endHour)->sum('guests');
 		// Réservations de la journée
 		$dayBookings = $restaurant->bookings()->where('start', '>', $today)->where('start', '<', $tomorrow)->get();
+
+        foreach ($bookings as $booking) {
+            $user = User::Where('id', $booking->organizer)->first();
+            if($user != null){$booking->organizer= $user->lastname;}
+        }
 
         return view('pages.admin.home', [
 			'restaurant' => $restaurant,

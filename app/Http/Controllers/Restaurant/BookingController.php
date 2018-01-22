@@ -95,6 +95,12 @@ class BookingController extends Controller
         }
         $booking = $this->updateBooking($bookingId, $request, $startHour, $endHour);
 
+        /** updating user name**/
+        $user = User::find(Auth::user()->id);
+        $user->update([
+            'lastname' => $request->get('name'),
+        ]);
+
         $this->sendEmail($restaurant, $booking, 'Modification de réservation', 'emails.booking');
 
         return redirect()->route('restaurants.bookings.show', ['restaurant' => $slug, 'booking' => $booking->id])->with('success', 'La réservation a bien été modifiée');
@@ -190,7 +196,7 @@ class BookingController extends Controller
     private function sendEmail($restaurant, $booking, $msg, $template)
     {
         $beautymail = app()->make(Beautymail::class);
-        $userLastname = (Auth::user()->lastname != null) ? Auth::user()->lastname : $booking->organizer;
+        $userLastname = (Auth::user()->lastname != null) ? Auth::user()->lastname : User::Where('id', $booking->organizer)->first()->lastname;
         $beautymail->send($template, ['restaurant' => $restaurant,'booking' => $booking, 'userLastname' => $userLastname], function($message) use ($booking, $msg)
         {
 
@@ -234,14 +240,26 @@ class BookingController extends Controller
 
     private function validator(array $data)
     {
-        return Validator::make($data, [
-            'name' => 'required',
-            'guests' => 'required|integer|min:1',
-            'date' => 'required',
-            'date_submit' => 'date|date_format:Y-m-d',
-            'time' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
-            'phone' => ['required', 'regex:/[0-9]{10}/'],
-            'details' => 'string'
-        ]);
+        if($data['name'] == null){
+            return Validator::make($data, [
+                'name' => 'required',
+                'guests' => 'required|integer|min:1',
+                'date' => 'required',
+                'date_submit' => 'date|date_format:Y-m-d',
+                'time' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
+                'phone' => ['required', 'regex:/[0-9]{10}/'],
+                'details' => 'string'
+            ]);
+        }else{
+            return Validator::make($data, [
+                'guests' => 'required|integer|min:1',
+                'date' => 'required',
+                'date_submit' => 'date|date_format:Y-m-d',
+                'time' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
+                'phone' => ['required', 'regex:/[0-9]{10}/'],
+                'details' => 'string'
+            ]);
+        }
+
     }
 }
