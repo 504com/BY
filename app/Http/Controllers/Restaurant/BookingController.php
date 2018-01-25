@@ -189,7 +189,7 @@ class BookingController extends Controller
 
         $bookings = Booking::where('organizer', Auth::user()->id)->get();
         return view('pages.customer.home', [
-            'bookings' => $bookings
+            'bookings' => $bookings, 'showSuccesDeleteMsg' => 'Réservation supprimée'
         ]);
     }
 

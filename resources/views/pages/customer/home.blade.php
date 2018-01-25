@@ -16,9 +16,15 @@
             </div>
         </div>
         <div class="row">
-                <div class="box-header">
-                    <h3 class="box-title">Liste des réservations</h3>
-                </div>
+            <div class="box-header">
+                <h3 class="box-title">Liste des réservations</h3>
+            </div>
+            @if (isset ($showSuccesDeleteMsg) && !is_null($showSuccesDeleteMsg))
+            <div id="deleteSuccesMsg" class="box-header">
+                <span  class="label label-danger">{{ $showSuccesDeleteMsg }}</span>
+            </div>
+            @endif
+
                 <div class="box-body table-responsive">
                     <table class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
                         <thead>
