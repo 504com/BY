@@ -29,8 +29,14 @@ class AdminController extends Controller
 
         foreach ($bookings as $booking) {
             $user = User::Where('id', $booking->organizer)->first();
-            if($user != null){$booking->organizer= $user->lastname;}
+            if($user != null){$booking->organizer = $user->lastname;}
         }
+
+        foreach ($dayBookings as $dayBooking) {
+            $user = User::Where('id', $dayBooking->organizer)->first();
+            if($user != null){$dayBooking->organizer = $user->lastname;}
+        }
+
 
         return view('pages.admin.home', [
 			'restaurant' => $restaurant,
