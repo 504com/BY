@@ -1600,7 +1600,6 @@ input[class="btn-ghost"]:after {
 .btn-small {
     padding: 6px 33px;
     font-size: 0.75em;
-    margin-left: 20px;
 }
 
 
@@ -10568,8 +10567,8 @@ h1, .comingsoon .content-wrapper .content-inner .cs-timer .item .nbr-timer{
 	background: #EA4D4D;
 }
 .btn-colored-create:hover{
-     background: #C42525;
- }
+	background: #C42525;
+}
 .btn-colored:after{
 	background: #EA4D4D;
 }

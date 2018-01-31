@@ -36,7 +36,6 @@ class BookingRepository
 
     public function update($booking, array $data, \DateTime $startHour, $endHour, $order)
     {
-        \Log::info('bookingId::::::'.$booking->id.' data request: '. $data['guests'].' start: '.$startHour.' end: '.$endHour.' ');
         $orderId = $order ? $order->id : null;
         $booking->update([
             'id' => $booking->id,

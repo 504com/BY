@@ -16,34 +16,38 @@
             </div>
         </div>
         <div class="row">
-                <div class="box-header">
-                    <h3 class="box-title">Liste des réservations</h3>
-                </div>
+            <div class="box-header">
+                <h3 class="box-title">Liste des réservations</h3>
+            </div>
+            @if (isset ($showSuccesDeleteMsg) && !is_null($showSuccesDeleteMsg))
+            <div id="deleteSuccesMsg" class="box-header">
+                <span  class="label label-danger">{{ $showSuccesDeleteMsg }}</span>
+            </div>
+            @endif
+
                 <div class="box-body table-responsive">
                     <table class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
                         <thead>
-                        <th>#</th>
-                        <th>Date réservée</th>
-                        <th>Personnes</th>
-                        <th>Action</th>
+                        <th  style="text-align: center">Détails </th>
+                        <th  style="text-align: center">Modifier / Annuler</th>
                         </thead>
                         <tbody>
                         @if (count($bookings) === 0 )
                             <tr>
                                 <td></td>
                                 <td><span class="label label-danger">Aucune réservation enregistrée</span></td>
-                                <td></td>
-                                <td></td>
                             </tr>
                         @else
                             @foreach($bookings as $booking)
                                 <tr>
-                                    <td>{{ \App\Models\Restaurant::where('id', $booking->restaurant_id)->first()->slug }}</td>
-                                    <td>{{ date('d/m/Y à H\hi', strtotime($booking->start)) }}</td>
-                                    <td>{{ $booking->guests }}</td>
                                     <td>
-                                        <a  href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small">Modifier</a>
-                                        <a  href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small">Annuler</a>
+                                        <p style="text-align: center">{{ \App\Models\Restaurant::where('id', $booking->restaurant_id)->first()->name }}</p>
+                                        <p  style="text-align: center">{{ date('d/m/Y à H\hi', strtotime($booking->start)) }}</p>
+                                        <p style="text-align: center">{{ $booking->guests }} personne(s)</p>
+                                    </td>
+                                    <td>
+                                        <p style="margin: 0px 0px 10px 5px; text-align: center"><a  href="{{ route('restaurant.bookings.edit', ['id' => $booking->id]) }}" class="btn btn-very-small">Modifier</a></p>
+                                        <p style="margin: 0px 0px 10px 5px; text-align: center"><a  href="{{ route('restaurant.bookings.destroy', ['id' => $booking->id]) }}" class="btn btn-very-small">Annuler</a></p>
                                     </td>
                                 </tr>
                             @endforeach

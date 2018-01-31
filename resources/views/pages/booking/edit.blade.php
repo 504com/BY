@@ -47,7 +47,10 @@
                     <div class="row">
                         <div class="col-md-offset-2 col-md-4">
                             <div class="form-group @if($errors->has('name'))has-error @endif">
-                                <input name="name" type="text" class="form-control" id="name" value="{{ $userLastname }}">
+                                <input name="name" type="text" class="form-control" id="name" value="{{ $userLastname }}" @if(!is_null($userLastname)) disabled="true" @endif>
+                                @if(!is_null($userLastname))
+                                    <input type="hidden" value="{{ $userLastname }}" id="name" name="name">
+                                @endif
                                 <label for="name">Nom <em>*</em></label>
                             </div>
                             <div class="form-group @if($errors->has('date') || $errors->has('date_submit'))has-error @endif">

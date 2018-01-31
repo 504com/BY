@@ -23,7 +23,7 @@ class OrderRepository
             'service_id' => $service,
             'restaurant_id' => $data['id'],
             'order_date' => $orderDate,
-            'detailWs' => $data['details']
+            'details' => $data['details']
         ]);
     }
 
