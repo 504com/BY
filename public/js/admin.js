@@ -52,13 +52,6 @@ $(function () {
 			}
 		});
 	}
-    $('#example1').Tabledit({
-        url: 'example.php',
-        columns: {
-            identifier: [0, 'id'],
-            editable: [[1, 'organizer'], [2, 'start'], [3, 'guests']]
-        }
-    });
 	// EDIT PRODUCTS
 	$('#edit-option').change(function () {
 		var baseUrl = $(this).data('url');

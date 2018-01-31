@@ -133,7 +133,6 @@
         <script src="{{ asset('js/vendor/jquery-2.1.4.min.js') }}"></script>
         <script src="{{ asset('js/vendor/bootstrap.min.js') }}"></script>
         <script src="{{ asset('js/vendor/adminlte/app.min.js') }}"></script>
-        <script src="{{ asset('js/jquery-tabledit/jquery.tabledit.js') }}"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
         @section('scripts')

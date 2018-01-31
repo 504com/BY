@@ -59,7 +59,7 @@
 						<h3 class="box-title">Réservations du jour</h3>
 					</div>
 					<div class="box-body table-responsive">
-						<table id="example1" class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
+						<table class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
 							<thead>
 								<th>#</th>
 								<th>Nom / Téléphone</th>
@@ -67,7 +67,6 @@
 								<th>Personnes</th>
 								<th>Détail de la réservation</th>
 								<th>Détail de la commande</th>
-								<th>Modifier / Annuler</th>
 								<th></th>
 							</thead>
 							<tbody>
@@ -80,43 +79,21 @@
 										<td></td>
 										<td></td>
 										<td></td>
-										<td></td>
 									</tr>
 								@endif
 								@foreach ($dayBookings as $dayBooking)
-									<tr id="{{ $loop->iteration }}">
-										<td name="id">{{ $loop->iteration }}</td>
-										<td name="organizer">{{ $dayBooking->organizer }} / {{$dayBooking->phone }}
-											<input class="tabledit-input form-control input-sm" type="text" name="organizer" value="{{ $dayBooking->organizer }} / {{$dayBooking->phone }}" style="display: none;" disabled="">
-										</td>
-										<td name="start">{{ date('d/m/Y à H\hi', strtotime($dayBooking->start)) }}
-											<input class="tabledit-input form-control input-sm" type="text" name="start" value="{{ date('d/m/Y à H\hi', strtotime($dayBooking->start)) }}" style="display: none;" disabled="">
-										</td>
-										<td name="guests">{{ $dayBooking->guests }}
-											<input class="tabledit-input form-control input-sm" type="text" name="guests" value="{{ $dayBooking->guests }}" style="display: none;" disabled="">
-										</td>
+									<tr>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ $dayBooking->organizer }} / {{$dayBooking->phone }}</td>
+										<td>{{ date('d/m/Y à H\hi', strtotime($dayBooking->start)) }}</td>
+										<td>{{ $dayBooking->guests }}</td>
 										<td><a href="{{ route('admin.bookings.show', ['id' => $dayBooking->id]) }}">Voir le détail</a></td>
 										@if( $dayBooking->order_id === null )
 											<td><span class="label label-info">Pas de commande anticipée</span></td>
 										@else
 											<td><a href="{{ route('admin.orders.show', ['id' => $dayBooking->order_id]) }}">Voir la commande</a></td>
 										@endif
-										<!--<td><a href="{{ route('admin.bookings.destroy', ['id' => $dayBooking->id]) }}" class="btn btn-danger"><i class="fa fa-times"></i></a></td>-->
-										<td style="white-space: nowrap; width: 1%;">
-											<div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
-												<div class="btn-group btn-group-sm" style="float: none;">
-													<button type="button" class="tabledit-edit-button btn btn-sm btn-default" style="float: none;">
-														<span class="glyphicon glyphicon-pencil"></span>
-													</button>
-													<button type="button" class="tabledit-delete-button btn btn-sm btn-default" style="float: none;">
-														<span class="glyphicon glyphicon-trash"></span>
-													</button>
-												</div>
-												<button type="button" class="tabledit-save-button btn btn-sm btn-success" style="display: none; float: none;">Save</button>
-												<button type="button" class="tabledit-confirm-button btn btn-sm btn-danger" style="display: none; float: none;">Confirm</button>
-												<button type="button" class="tabledit-restore-button btn btn-sm btn-warning" style="display: none; float: none;">Restore</button>
-											</div>
-										</td>
+										<td><a href="{{ route('admin.bookings.destroy', ['id' => $dayBooking->id]) }}" class="btn btn-danger"><i class="fa fa-times"></i></a></td>
 									</tr>
 								@endforeach
 							</tbody>
