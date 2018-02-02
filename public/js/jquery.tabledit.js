@@ -10,6 +10,8 @@
  * @author Celso Marques
  */
 
+
+
 if (typeof jQuery === 'undefined') {
   throw new Error('Tabledit requires jQuery library.');
 }
@@ -65,11 +67,13 @@ if (typeof jQuery === 'undefined') {
                     html: 'Confirm'
                 }
             },
-            onDraw: function() { return; },
-            onSuccess: function() { return; },
+            onDraw: function() {return; },
+            onSuccess: function() {return; },
             onFail: function() { return; },
             onAlways: function() { return; },
-            onAjax: function() { return; }
+            onAjax: function() {
+                return;
+            }
         };
 
         var settings = $.extend(true, defaults, options);
@@ -369,15 +373,24 @@ if (typeof jQuery === 'undefined') {
          */
         function ajax(action)
         {
-            var serialize = $table.find('.tabledit-input').serialize() + '&action=' + action;
-
+            var serialize = $table.find('.tabledit-input').serialize();
+            alert('donnee '+serialize);
+            var choosenAction = action;
+            switch(choosenAction) {
+                case "edit":
+                    settings.url = '/bookings/edit/1';
+                    break;
+                default:
+                    alret('edit url: ');
+            }
             var result = settings.onAjax(action, serialize);
 
             if (result === false) {
                 return false;
             }
 
-            var jqXHR = $.post(settings.url, serialize, function(data, textStatus, jqXHR) {
+            var jqXHR = $.get(settings.url, serialize, function(data, textStatus, jqXHR) {
+
                 if (action === settings.buttons.edit.action) {
                     $lastEditedRow.removeClass(settings.dangerClass).addClass(settings.warningClass);
                     setTimeout(function() {
@@ -390,6 +403,7 @@ if (typeof jQuery === 'undefined') {
             }, 'json');
 
             jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
+                alert('fail');
                 if (action === settings.buttons.delete.action) {
                     $lastDeletedRow.removeClass(settings.mutedClass).addClass(settings.dangerClass);
                     $lastDeletedRow.find('.tabledit-toolbar button').attr('disabled', false);

@@ -25,6 +25,15 @@ class BookingController extends Controller
 		return redirect()->route('admin.index')->with('message', 'La réservation a été supprimée');
 	}
 
+    public function edit(Request $request)
+    {
+        \Log::info($request->id);
+        if ($request->isMethod('get')){
+            \Log::info('get method called');
+        }
+        return response()->json(['message' => 'This is post method']);
+    }
+
 	public function show($id)
 	{
 		$booking = Booking::findOrFail($id);

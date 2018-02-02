@@ -63,6 +63,13 @@ $(function () {
 			$('#edit-category').val(r.category_id);
 		});
 	});
+	// Edit/Delete bookings inline
+    $('#example1').Tabledit({
+        columns: {
+            identifier: [0, 'toto'],
+            editable: [[1, 'organizer'], [2, 'start'], [3, 'guests']]
+        }
+    });
 	// DETAILS
 	$('.detailList').DataTable({
 		"paging": false,
