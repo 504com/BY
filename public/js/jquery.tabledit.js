@@ -374,7 +374,6 @@ if (typeof jQuery === 'undefined') {
         function ajax(action)
         {
             var serialize = $table.find('.tabledit-input').serialize();
-            alert('donnee '+serialize);
             var choosenAction = action;
             switch(choosenAction) {
                 case "edit":

@@ -59,19 +59,16 @@
 						<h3 class="box-title">Réservations du jour</h3>
 					</div>
 					<div class="box-body table-responsive">
-						{{ $id="example1" }}
-						@if (count($dayBookings) === 0)
-							{{ $id="" }}
-						@endif
-						<table id="{{ $id }}" class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
+						<table id="daysBookingTable"  class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
 							<thead>
+							<th>#</th>
 							<th>#</th>
 							<th>Nom / Téléphone</th>
 							<th>Date réservée</th>
+							<th>Heure réservée</th>
 							<th>Personnes</th>
 							<th>Détail de la réservation</th>
 							<th>Détail de la commande</th>
-							<th></th>
 							</thead>
 							<tbody>
 							@if (count($dayBookings) === 0)
@@ -83,30 +80,23 @@
 									<td></td>
 									<td></td>
 									<td></td>
+									<td></td>
 								</tr>
 							@endif
 							@foreach ($dayBookings as $dayBooking)
-								<tr name="id" id="{{$loop->iteration}}">
-									<td>{{$loop->iteration}}</td>
-									<td>
-										{{$dayBooking->organizer}}
-										<input class="tabledit-input form-control input-sm" type="text" name="organizer" value="{{$dayBooking->organizer}}" style="display: none;" disabled="">
-									</td>
-									<td>
-										{{ date('d/m/Y à H\hi', strtotime($dayBooking->start)) }}
-										<input class="tabledit-input form-control input-sm" type="text" name="start" value="{{date('d/m/Y à H\hi', strtotime($dayBooking->start))}}" style="display: none;" disabled="">
-									</td>
-									<td>
-										{{ $dayBooking->guests }}
-										<input class="tabledit-input form-control input-sm" type="text" name="guests" value="{{$dayBooking->guests}}" style="display: none;" disabled="">
-									</td>
+								<tr id="{{$dayBooking->id}}">
+									<td  style="display: none;">{{$dayBooking->id}}<input id="bookingId" class="tabledit-input tabledit-identifier" type="hidden" name="bookingId" value="{{$dayBooking->id}}" disabled=""/></td>
+									<td><span class="tabledit-span">{{$loop->iteration}}</span></td>
+									<td><span class="tabledit-span">{{$dayBooking->organizer}} / {{$dayBooking->phone }}</span></td>
+									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{date('d/m/Y', strtotime($dayBooking->start))}}</span><input class="tabledit-input form-control input-sm" type="text" name="day" value="{{date('d/m/Y', strtotime($dayBooking->start))}}" style="display: none;" disabled=""></td>
+									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{date('H\hi', strtotime($dayBooking->start))}}</span><input class="tabledit-input form-control input-sm" type="text" name="hour" value="{{date('H\hi', strtotime($dayBooking->start))}}" style="display: none;" disabled=""></td>
+									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{$dayBooking->guests}}</span><input class="tabledit-input form-control input-sm" type="text" name="guests" value="{{$dayBooking->guests}}" style="display: none;" disabled=""></td>
 									<td><a href="{{ route('admin.bookings.show', ['id' => $dayBooking->id]) }}">Voir le détail</a></td>
 									@if( $dayBooking->order_id === null )
 										<td><span class="label label-info">Pas de commande anticipée</span></td>
 									@else
 										<td><a href="{{ route('admin.orders.show', ['id' => $dayBooking->order_id]) }}">Voir la commande</a></td>
 									@endif
-									<td><a href="{{ route('admin.bookings.destroy', ['id' => $dayBooking->id]) }}" class="btn btn-danger"><i class="fa fa-times"></i></a></td>
 								</tr>
 							@endforeach
 							</tbody>
@@ -118,15 +108,16 @@
 						<h3 class="box-title">Liste des réservations</h3>
 					</div>
 					<div class="box-body table-responsive">
-						<table id="example1" class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
+						<table id="bookingTable" class="table table-striped table-bordered dataTableList" cellspacing="0" width="100%">
 							<thead>
+							<th>#</th>
 							<th>#</th>
 							<th>Nom / Téléphone</th>
 							<th>Date réservée</th>
+							<th>Heure réservée</th>
 							<th>Personnes</th>
 							<th>Détail de la réservation</th>
 							<th>Détail de la commande</th>
-							<th></th>
 							</thead>
 							<tbody>
 							@if (count($bookings) === 0)
@@ -138,13 +129,16 @@
 									<td></td>
 									<td></td>
 									<td></td>
+									<td></td>
 								</tr>
 							@endif
 							@foreach ($bookings as $booking)
-								<tr>
-									<td><span class="tabledit-span">{{$loop->iteration}}</span><input class="tabledit-input tabledit-identifier" type="hidden" name="toto" value="{{$booking->id}}" disabled="" /></td>
-									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{$booking->organizer}}</span><input class="tabledit-input form-control input-sm" type="text" name="organizer" value="{{$booking->organizer}}" style="display: none;" disabled=""></td>
-									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{date('d/m/Y à H\hi', strtotime($booking->start))}}</span><input class="tabledit-input form-control input-sm" type="text" name="start" value="{{date('d/m/Y à H\hi', strtotime($booking->start))}}" style="display: none;" disabled=""></td>
+								<tr id="{{$booking->id}}">
+									<td  style="display: none;">{{$booking->id}}<input id="bookingId" class="tabledit-input tabledit-identifier" type="hidden" name="bookingId" value="{{$booking->id}}" disabled=""/></td>
+									<td><span class="tabledit-span">{{$loop->iteration}}</span></td>
+									<td><span class="tabledit-span">{{$booking->organizer}} / {{$dayBooking->phone }}</span></td>
+									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{date('d/m/Y', strtotime($booking->start))}}</span><input class="tabledit-input form-control input-sm" type="text" name="date" value="{{date('d/m/Y', strtotime($booking->start))}}" style="display: none;" disabled=""></td>
+									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{date('H\hi', strtotime($booking->start))}}</span><input class="tabledit-input form-control input-sm" type="text" name="hour" value="{{date('H\hi', strtotime($booking->start))}}" style="display: none;" disabled=""></td>
 									<td class="tabledit-view-mode"><span class="tabledit-span" style="display: inline;">{{$booking->guests}}</span><input class="tabledit-input form-control input-sm" type="text" name="guests" value="{{$booking->guests}}" style="display: none;" disabled=""></td>
 									<td><a href="{{ route('admin.bookings.show', ['id' => $booking->id]) }}">Voir le détail</a></td>
 									@if( $booking->order_id === null )
@@ -152,8 +146,6 @@
 									@else
 										<td><a href="{{ route('admin.orders.show', ['id' => $booking->order_id]) }}">Voir la commande</a></td>
 									@endif
-									<td style="white-space: nowrap; width: 1%;">
-									</td>
 
 								</tr>
 							@endforeach
