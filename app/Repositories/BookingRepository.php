@@ -49,4 +49,18 @@ class BookingRepository
 
         return $booking;
     }
+
+    public function updateAdmin($booking, array $data, \DateTime $startHour, $endHour, $order)
+    {
+        $orderId = $order ? $order->id : null;
+        $booking->update([
+            'id' => $booking->id,
+            'guests' => (int)$data['guests'],
+            'start' => $startHour,
+            'end' => $endHour,
+            'order_id' => $orderId,
+        ]);
+
+        return $booking;
+    }
 }

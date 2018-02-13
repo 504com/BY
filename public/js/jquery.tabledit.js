@@ -230,13 +230,13 @@ if (typeof jQuery === 'undefined') {
                 }
                 // Hide selectTime element
                 if( $(td).attr("name") === 'timeColumn'){
-                    $(td).find('select[name="time"]').hide();
+                    $(td).find('select[name="time"]').remove();
                     $(td).find('.tabledit-span').show();
                 }
                 // Hide selectTime element
                 if( $(td).attr("name") === 'dateColumn'){
                     // Update hide/show property
-                    $(td).find('input[name="date"]').prop('disabled', true).hide();
+                    $(td).find('input[name="date"]').remove();
                     $(td).find('.tabledit-span').show();
                 }
 
@@ -260,7 +260,6 @@ if (typeof jQuery === 'undefined') {
                 // create selectTime element and add it to specific column
                 if( $(td).attr("name") === 'timeColumn'){
                     var text = $(td).find('.tabledit-span').text();
-
                     var span = '<span class="tabledit-span">' + text + '</span>';
                     var selectTimeElt = '<select class="form-control"  name="time" id="time" ><option >Choissiez le jour</option></select>';
                     $(td).html(span +  selectTimeElt);
@@ -270,30 +269,12 @@ if (typeof jQuery === 'undefined') {
                     $(td).find('select[name="time"]').show();
                 }
                 if( $(td).attr("name") === 'dateColumn'){
-
-                    // ----- Create input calendar popup element
-                    var $td = $table.find('td[name="dateColumn"]');
-                    var text = $td.find('.tabledit-span').text();
-
-                    // span element.
+                    // Create span/input calendar popup element
+                    var text = $(td).find('.tabledit-span').text();
                     var span = '<span class="tabledit-span">' + text + '</span>';
-                    // Create input calendar element
-                    /*let urlPopup = laroute.route('workhours.show', {id: $('input[name="id"]').val()});
-                    var input =  '<input data-url="http://www.project-by.dev:8000'+urlPopup+'" class="form-control" type="text" name="date" id="date" value="'+text+'" style="display: none;" disabled>';
-                    */
-
-                    var input =  '<input data-value="'+text+'" class="form-control" type="text" name="date" id="date"  style="display: none;" disabled>';
-                    $td.html(span + input);
-
+                    var input =  '<input data-value="'+text+'" class="form-control target-date"  type="text" name="date" id="date"  style="display: none;" disabled>';
+                    $(td).html(span + input);
                     $('input[name="date"]').pickadate(optionsDatePicker);
-
-                    // init popup calendar and select time with booking data
-                    /*let url = laroute.route('workhours.index', {id: $('input[name="id"]').val(), day: null});
-                    $.get(url, {
-                        date: $('input[name="date"]').val()
-                    }, function (data) {
-                        $('select[name="time"]').html(data);
-                    });*/
 
                     // Manage Hide/show property
                     $(td).find('input[name="date"]').prop('disabled', false).show();
@@ -340,12 +321,6 @@ if (typeof jQuery === 'undefined') {
                 $(td).each(function() {
                     // Get input element.
                     var $input = $(this).find('.tabledit-input');
-                    // Set span text with input/select new value.
-                    /*if ($input.is('select')) {
-                        $(this).find('.tabledit-span').text($input.find('option:selected').text());
-                    } else {
-                        $(this).find('.tabledit-span').text($input.val());
-                    }*/
                     $(this).find('.tabledit-span').text($input.val());
                     // Change to view mode.
                     Mode.view(this);
@@ -430,24 +405,33 @@ if (typeof jQuery === 'undefined') {
          */
         function ajax(action)
         {
-            var serialize = $table.find('.tabledit-input').serialize();
-            //alert('time: '+$('select[name="time"]').val());
-            alert('data: '+serialize);
-            var choosenAction = action;
-            switch(choosenAction) {
+            var guests = $('input[name="guests"]').val();
+            var guests = $('td[name="guests"]').val();
+            var time = $('select[name="time"]').val();
+            var date = $('input[name="date"]').val();
+            var restaurantId = $('input[name="id"]').val();
+            var bookingId = $('input[name="guests"]').val();
+            var act = action;
+            switch(act) {
                 case "edit":
                     settings.url = '/bookings/edit/1';
                     break;
                 default:
-                    alret('edit url: ');
+                    alert('edit url: ');
             }
-            var result = settings.onAjax(action, serialize);
+            var result = settings.onAjax(action);
 
             if (result === false) {
                 return false;
             }
 
-            var jqXHR = $.get(settings.url, serialize, function(data, textStatus, jqXHR) {
+            var jqXHR = $.get(settings.url, {
+                    guests: guests,
+                    time: time,
+                    date: date,
+                    restaurantId: restaurantId
+                }
+                , function(data, textStatus, jqXHR) {
 
                 if (action === settings.buttons.edit.action) {
                     $lastEditedRow.removeClass(settings.dangerClass).addClass(settings.warningClass);

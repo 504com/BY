@@ -25,11 +25,6 @@ class WorkhourController extends Controller
         return view('partials.bookings.time', compact('hours'));
     }
 
-    public function popupCalendarShow($id)
-    {
-        return Workhour::where('restaurant_id', $id)->get();
-    }
-
     private function getBookingHours(Carbon $date, Collection $workhours, $bookingDuration)
     {
         return $workhours->map(function ($workhour) use ($bookingDuration, $date) {

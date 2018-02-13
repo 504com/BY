@@ -149,7 +149,6 @@
 									<td name="organizer">{{$booking->organizer}} / {{$booking->phone }}</td>
 									<td name="dateColumn" class="tabledit-view-mode">
                                         <span class="tabledit-span">{{$booking->start->format('d/m/Y')}}</span>
-										<!-- <input data-url="{{ route('workhours.show', ['id' => $restaurant->id]) }}" class="form-control" type="text" name="date" id="date" value="{{$booking->start->format('d/m/Y')}}" style="display: none;" disabled> -->
 									</td>
 									<td name="timeColumn" class="tabledit-view-mode">
                                         <span class="tabledit-span">{{date('H\hi', strtotime($booking->start))}}</span>
