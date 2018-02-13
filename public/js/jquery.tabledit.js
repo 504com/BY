@@ -67,13 +67,11 @@ if (typeof jQuery === 'undefined') {
                     html: 'Confirm'
                 }
             },
-            onDraw: function() {return; },
-            onSuccess: function() {return; },
+            onDraw: function() { return; },
+            onSuccess: function() { return; },
             onFail: function() { return; },
             onAlways: function() { return; },
-            onAjax: function() {
-                return;
-            }
+            onAjax: function() { return; }
         };
 
         var settings = $.extend(true, defaults, options);
@@ -121,30 +119,10 @@ if (typeof jQuery === 'undefined') {
                             if (!settings.editButton) {
                                 $(this).css('cursor', 'pointer');
                             }
-
                             // Create span element.
                             var span = '<span class="tabledit-span">' + text + '</span>';
-
-                            // Check if exists the third parameter of editable array.
-                            if (typeof settings.columns.editable[i][2] !== 'undefined') {
-                                // Create select element.
-                                var input = '<select class="tabledit-input ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none;" disabled>';
-
-                                // Create options for select element.
-                                $.each(jQuery.parseJSON(settings.columns.editable[i][2]), function(index, value) {
-                                    if (text === value) {
-                                        input += '<option value="' + index + '" selected>' + value + '</option>';
-                                    } else {
-                                        input += '<option value="' + index + '">' + value + '</option>';
-                                    }
-                                });
-
-                                // Create last piece of select element.
-                                input += '</select>';
-                            } else {
-                                // Create text input element.
-                                var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="' + settings.columns.editable[i][1] + '" value="' + $(this).text() + '" style="display: none;" disabled>';
-                            }
+                            // Create text input element.
+                            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="' + settings.columns.editable[i][1] + '" value="' + $(this).text() + '" style="display: none;" disabled>';
 
                             // Add elements and class "view" to table cell.
                             $(this).html(span + input);
@@ -194,7 +172,7 @@ if (typeof jQuery === 'undefined') {
                                        </div></div>';
 
                         // Add toolbar column cells.
-                        $table.find('tr:gt(0)').append('<td style="white-space: nowrap; width: 1%;">' + toolbar + '</td>');
+                        $table.find('.toolbar-class').append(toolbar);
                     }
                 }
             }
@@ -222,6 +200,19 @@ if (typeof jQuery === 'undefined') {
                     $tr.find('button.tabledit-save-button').hide();
                     $tr.find('button.tabledit-edit-button').removeClass('active').blur();
                 }
+                // Hide selectTime element
+                if( $(td).attr("name") === 'timeColumn'){
+                    var text = $(td).find('select[name="time"]').text();
+                    var span = '<span class="tabledit-span">' + text + '</span>';
+                    $(td).html(span);
+                }
+                // Hide selectTime element
+                if( $(td).attr("name") === 'dateColumn'){
+                    var text = $(td).find('input[name="date"]');
+                    var span = '<span class="tabledit-span">' + text.val() + '</span>';
+                    $(td).html(span);
+                }
+
             },
             edit: function(td) {
                 Delete.reset(td);
@@ -239,9 +230,47 @@ if (typeof jQuery === 'undefined') {
                 if (settings.autoFocus) {
                     $input.focus();
                 }
+                // create selectTime element and add it to specific column
+                if( $(td).attr("name") === 'timeColumn'){
+                    var text = $(td).find('.tabledit-span').text();
+                    var selectTimeElt = '<select class="form-control"  name="time" id="time" ><option >'+text+'</option></select>';
+                    $(td).html(selectTimeElt);
+                }
+                if( $(td).attr("name") === 'dateColumn'){
+                    var text = $(td).find('.tabledit-span').text();
+                    var dateInputElt = '<input data-url="http://restaurant.project-by.dev:8000/workhours/3" class="form-control" type="text" name="date" id="date" value="'+text+'">';
+                    $(td).html(dateInputElt);
+                    let calendarOptions = {
+                        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                        today: 'Aujourd\'hui',
+                        clear: 'Effacer',
+                        min: true,
+                        formatSubmit: 'yyyy-mm-dd',
+                        format: 'd mmmm yyyy',
+                        firstDay: 1,
+                        onClose: function() {
+                            let day = this.get('select').day;
+
+                            if (day == 0) {
+                                day = 7;
+                            }
+                            let id = $('input[name="id"]').val();
+                            let url = laroute.route('workhours.index', {id: id, day: day});
+                            let date = this.get('select').obj;
+                            $.get(url, {
+                                date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                            }, function (data) {
+                                $('select[name="time"]').html(data);
+                            });
+
+                        }
+                    };
+                    $('input[name="date"]').pickadate(calendarOptions);
+                }
                 // Add "edit" class and remove "view" class in td element.
                 $(td).addClass('tabledit-edit-mode').removeClass('tabledit-view-mode');
-                // Update toolbar buttons.
+                // Update toolbar buttons.kjo
                 if (settings.editButton) {
                     $tr.find('button.tabledit-edit-button').addClass('active');
                     $tr.find('button.tabledit-save-button').show();
@@ -257,18 +286,13 @@ if (typeof jQuery === 'undefined') {
         var Edit = {
             reset: function(td) {
                 $(td).each(function() {
-                    // Get input element.
-                    var $input = $(this).find('.tabledit-input');
-                    // Get span text.
-                    var text = $(this).find('.tabledit-span').text();
-                    // Set input/select value with span text.
-                    if ($input.is('select')) {
-                        $input.find('option').filter(function() {
-                            return $.trim($(this).text()) === text;
-                        }).attr('selected', true);
-                    } else {
+                        // Get input element.
+                        var $input = $(this).find('.tabledit-input');
+                        // Get span text.
+                        var text = $(this).find('.tabledit-span').text();
+
                         $input.val(text);
-                    }
+
                     // Change to view mode.
                     Mode.view(this);
                 });
@@ -285,11 +309,12 @@ if (typeof jQuery === 'undefined') {
                     // Get input element.
                     var $input = $(this).find('.tabledit-input');
                     // Set span text with input/select new value.
-                    if ($input.is('select')) {
+                    /*if ($input.is('select')) {
                         $(this).find('.tabledit-span').text($input.find('option:selected').text());
                     } else {
                         $(this).find('.tabledit-span').text($input.val());
-                    }
+                    }*/
+                    $(this).find('.tabledit-span').text($input.val());
                     // Change to view mode.
                     Mode.view(this);
                 });
@@ -374,6 +399,8 @@ if (typeof jQuery === 'undefined') {
         function ajax(action)
         {
             var serialize = $table.find('.tabledit-input').serialize();
+            //alert('time: '+$('select[name="time"]').val());
+            alert('data: '+serialize);
             var choosenAction = action;
             switch(choosenAction) {
                 case "edit":
@@ -402,7 +429,6 @@ if (typeof jQuery === 'undefined') {
             }, 'json');
 
             jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
-                alert('fail');
                 if (action === settings.buttons.delete.action) {
                     $lastDeletedRow.removeClass(settings.mutedClass).addClass(settings.dangerClass);
                     $lastDeletedRow.find('.tabledit-toolbar button').attr('disabled', false);
@@ -607,7 +633,6 @@ if (typeof jQuery === 'undefined') {
                     Edit.submit($td);
                     break;
                 case 27: // Escape.
-                    Edit.reset($td);
                     Delete.reset($td);
                     break;
             }

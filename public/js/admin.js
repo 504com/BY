@@ -64,10 +64,20 @@ $(function () {
 		});
 	});
 	// Edit/Delete bookings inline
-    $('#example1').Tabledit({
+    $('#bookingTable').Tabledit({
+        hideIdentifier: true,
         columns: {
-            identifier: [0, 'toto'],
-            editable: [[1, 'organizer'], [2, 'start'], [3, 'guests']]
+            identifier: [0, 'bookingId'],
+            editable: [[5, 'guests']]
+        }
+    });
+
+    // Edit/Delete bookings inline
+    $('#daysBookingTable').Tabledit({
+        hideIdentifier: true,
+        columns: {
+            identifier: [0, 'dayDookingId'],
+            editable: [[5, 'dayGuests']]
         }
     });
 	// DETAILS
