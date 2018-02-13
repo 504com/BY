@@ -19,6 +19,34 @@ if (typeof jQuery === 'undefined') {
 (function($) {
     'use strict';
 
+    // configure input calendar datepicker
+    let optionsDatePicker = {
+        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+        today: 'Aujourd\'hui',
+        clear: 'Effacer',
+        min: true,
+        formatSubmit: 'yyyy-mm-dd',
+        format: 'dd/mm/yyyy',
+        firstDay: 1,
+        onClose: function() {
+            let day = this.get('select').day;
+
+            if (day == 0) {
+                day = 7;
+            }
+            let id = $('input[name="id"]').val();
+            let url = laroute.route('workhours.index', {id: id, day: day});
+            let date = this.get('select').obj;
+            $.get(url, {
+                date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            }, function (data) {
+                $('select[name="time"]').html(data);
+            });
+            $(document.activeElement).blur();
+        }
+    };
+
     $.fn.Tabledit = function(options) {
         if (!this.is('table')) {
             throw new Error('Tabledit only works when applied to a table.');
@@ -67,7 +95,8 @@ if (typeof jQuery === 'undefined') {
                     html: 'Confirm'
                 }
             },
-            onDraw: function() { return; },
+            onDraw: function() {
+                return; },
             onSuccess: function() { return; },
             onFail: function() { return; },
             onAlways: function() { return; },
@@ -110,23 +139,22 @@ if (typeof jQuery === 'undefined') {
                 editable: function() {
                     for (var i = 0; i < settings.columns.editable.length; i++) {
                         var $td = $table.find('tbody td:nth-child(' + (parseInt(settings.columns.editable[i][0]) + 1) + ')');
-
                         $td.each(function() {
-                            // Get text of this cell.
-                            var text = $(this).text();
+                                // Get text of this cell.
+                                var text = $(this).text();
+                                // Add pointer as cursor.
+                                if (!settings.editButton) {
+                                    $(this).css('cursor', 'pointer');
+                                }
+                                // Create span element.
+                                var span = '<span class="tabledit-span">' + text + '</span>';
+                                // Create text input element.
+                                var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="' + settings.columns.editable[i][1] + '" value="' + $(this).text() + '" style="display: none;" disabled>';
 
-                            // Add pointer as cursor.
-                            if (!settings.editButton) {
-                                $(this).css('cursor', 'pointer');
-                            }
-                            // Create span element.
-                            var span = '<span class="tabledit-span">' + text + '</span>';
-                            // Create text input element.
-                            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="' + settings.columns.editable[i][1] + '" value="' + $(this).text() + '" style="display: none;" disabled>';
+                                // Add elements and class "view" to table cell.
+                                $(this).html(span + input);
+                                $(this).addClass('tabledit-view-mode');
 
-                            // Add elements and class "view" to table cell.
-                            $(this).html(span + input);
-                            $(this).addClass('tabledit-view-mode');
                        });
                     }
                 },
@@ -202,15 +230,14 @@ if (typeof jQuery === 'undefined') {
                 }
                 // Hide selectTime element
                 if( $(td).attr("name") === 'timeColumn'){
-                    var text = $(td).find('select[name="time"]').text();
-                    var span = '<span class="tabledit-span">' + text + '</span>';
-                    $(td).html(span);
+                    $(td).find('select[name="time"]').hide();
+                    $(td).find('.tabledit-span').show();
                 }
                 // Hide selectTime element
                 if( $(td).attr("name") === 'dateColumn'){
-                    var text = $(td).find('input[name="date"]');
-                    var span = '<span class="tabledit-span">' + text.val() + '</span>';
-                    $(td).html(span);
+                    // Update hide/show property
+                    $(td).find('input[name="date"]').prop('disabled', true).hide();
+                    $(td).find('.tabledit-span').show();
                 }
 
             },
@@ -233,40 +260,45 @@ if (typeof jQuery === 'undefined') {
                 // create selectTime element and add it to specific column
                 if( $(td).attr("name") === 'timeColumn'){
                     var text = $(td).find('.tabledit-span').text();
-                    var selectTimeElt = '<select class="form-control"  name="time" id="time" ><option >'+text+'</option></select>';
-                    $(td).html(selectTimeElt);
+
+                    var span = '<span class="tabledit-span">' + text + '</span>';
+                    var selectTimeElt = '<select class="form-control"  name="time" id="time" ><option >Choissiez le jour</option></select>';
+                    $(td).html(span +  selectTimeElt);
+
+                    //manage Hide/Show property
+                    $(td).find('.tabledit-span').hide();
+                    $(td).find('select[name="time"]').show();
                 }
                 if( $(td).attr("name") === 'dateColumn'){
-                    var text = $(td).find('.tabledit-span').text();
-                    var dateInputElt = '<input data-url="http://restaurant.project-by.dev:8000/workhours/3" class="form-control" type="text" name="date" id="date" value="'+text+'">';
-                    $(td).html(dateInputElt);
-                    let calendarOptions = {
-                        monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-                        weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
-                        today: 'Aujourd\'hui',
-                        clear: 'Effacer',
-                        min: true,
-                        formatSubmit: 'yyyy-mm-dd',
-                        format: 'd mmmm yyyy',
-                        firstDay: 1,
-                        onClose: function() {
-                            let day = this.get('select').day;
 
-                            if (day == 0) {
-                                day = 7;
-                            }
-                            let id = $('input[name="id"]').val();
-                            let url = laroute.route('workhours.index', {id: id, day: day});
-                            let date = this.get('select').obj;
-                            $.get(url, {
-                                date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-                            }, function (data) {
-                                $('select[name="time"]').html(data);
-                            });
+                    // ----- Create input calendar popup element
+                    var $td = $table.find('td[name="dateColumn"]');
+                    var text = $td.find('.tabledit-span').text();
 
-                        }
-                    };
-                    $('input[name="date"]').pickadate(calendarOptions);
+                    // span element.
+                    var span = '<span class="tabledit-span">' + text + '</span>';
+                    // Create input calendar element
+                    /*let urlPopup = laroute.route('workhours.show', {id: $('input[name="id"]').val()});
+                    var input =  '<input data-url="http://www.project-by.dev:8000'+urlPopup+'" class="form-control" type="text" name="date" id="date" value="'+text+'" style="display: none;" disabled>';
+                    */
+
+                    var input =  '<input data-value="'+text+'" class="form-control" type="text" name="date" id="date"  style="display: none;" disabled>';
+                    $td.html(span + input);
+
+                    $('input[name="date"]').pickadate(optionsDatePicker);
+
+                    // init popup calendar and select time with booking data
+                    /*let url = laroute.route('workhours.index', {id: $('input[name="id"]').val(), day: null});
+                    $.get(url, {
+                        date: $('input[name="date"]').val()
+                    }, function (data) {
+                        $('select[name="time"]').html(data);
+                    });*/
+
+                    // Manage Hide/show property
+                    $(td).find('input[name="date"]').prop('disabled', false).show();
+                    $(td).find('.tabledit-span').hide();
+
                 }
                 // Add "edit" class and remove "view" class in td element.
                 $(td).addClass('tabledit-edit-mode').removeClass('tabledit-view-mode');

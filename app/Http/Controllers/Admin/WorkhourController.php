@@ -15,7 +15,6 @@ class WorkhourController extends Controller
 {
     public function index($id, $day, Request $request)
     {
-        \Log::info("WorkhourController");
         $restaurant = Restaurant::find($id);
         $bookingDay = Carbon::createFromFormat('Y-m-d', $request->get('date'));
         $workhours = $restaurant->workhours()->where('day_id', $day)->orderBy('start')->get();
@@ -24,6 +23,11 @@ class WorkhourController extends Controller
         $hours = $this->getBookingHours($bookingDay, $workhours, $bookingTime);
 
         return view('partials.bookings.time', compact('hours'));
+    }
+
+    public function popupCalendarShow($id)
+    {
+        return Workhour::where('restaurant_id', $id)->get();
     }
 
     private function getBookingHours(Carbon $date, Collection $workhours, $bookingDuration)

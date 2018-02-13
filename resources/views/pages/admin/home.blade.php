@@ -144,23 +144,24 @@
 							@endif
 							@foreach ($bookings as $booking)
 								<tr id="{{$booking->id}}">
-									<td style="display: none;">{{$booking->id}}<input id="bookingId" class="tabledit-input tabledit-identifier" type="hidden" name="bookingId" value="{{$booking->id}}" disabled=""/></td>
-									<td>{{$loop->iteration}}</td>
-									<td>{{$booking->organizer}} / {{$booking->phone }}</td>
+									<td name="identifier" style="display: none;">{{$booking->id}}<input id="bookingId" class="tabledit-input tabledit-identifier" type="hidden" name="bookingId" value="{{$booking->id}}" disabled=""/></td>
+									<td name="iteration">{{$loop->iteration}}</td>
+									<td name="organizer">{{$booking->organizer}} / {{$booking->phone }}</td>
 									<td name="dateColumn" class="tabledit-view-mode">
                                         <span class="tabledit-span">{{$booking->start->format('d/m/Y')}}</span>
+										<!-- <input data-url="{{ route('workhours.show', ['id' => $restaurant->id]) }}" class="form-control" type="text" name="date" id="date" value="{{$booking->start->format('d/m/Y')}}" style="display: none;" disabled> -->
 									</td>
 									<td name="timeColumn" class="tabledit-view-mode">
                                         <span class="tabledit-span">{{date('H\hi', strtotime($booking->start))}}</span>
                                     </td>
 									<td>{{$booking->guests}}</td>
-									<td><a href="{{ route('admin.bookings.show', ['id' => $booking->id]) }}">Voir le détail</a></td>
+									<td  name="detailBooking"><a href="{{ route('admin.bookings.show', ['id' => $booking->id]) }}">Voir le détail</a></td>
 									@if( $booking->order_id === null )
-										<td><span class="label label-info">Pas de commande anticipée</span></td>
+										<td name="noBookingItems"><span class="label label-info">Pas de commande anticipée</span></td>
 									@else
-										<td><a href="{{ route('admin.orders.show', ['id' => $booking->order_id]) }}">Voir la commande</a></td>
+										<td name="detailOrder"><a href="{{ route('admin.orders.show', ['id' => $booking->order_id]) }}">Voir la commande</a></td>
 									@endif
-									<td class="toolbar-class" style="white-space: nowrap; width: 1%;"></td>
+									<td name="toolbar" class="toolbar-class" style="white-space: nowrap; width: 1%;"></td>
 								</tr>
 							@endforeach
 							</tbody>
