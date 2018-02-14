@@ -69,7 +69,7 @@ if (typeof jQuery === 'undefined') {
             editButton: true,
             deleteButton: true,
             saveButton: true,
-            restoreButton: true,
+            restoreButton: false,
             buttons: {
                 edit: {
                     class: 'btn btn-sm btn-default',
@@ -97,7 +97,9 @@ if (typeof jQuery === 'undefined') {
             },
             onDraw: function() {
                 return; },
-            onSuccess: function() { return; },
+            onSuccess: function() {
+                return;
+                },
             onFail: function() { return; },
             onAlways: function() { return; },
             onAjax: function() { return; }
@@ -185,7 +187,7 @@ if (typeof jQuery === 'undefined') {
 
                         // Add toolbar column header if not exists.
                         if ($table.find('th.tabledit-toolbar-column').length === 0) {
-                            $table.find('tr:first').append('<th class="tabledit-toolbar-column"></th>');
+                            $table.find('tr:first').append('<th class="tabledit-toolbar-column">Modifier / Annuler</th>');
                         }
 
                         // Create edit button.
@@ -261,7 +263,6 @@ if (typeof jQuery === 'undefined') {
                     $(td).find('select[name="guests"]').removeClass('guestsSelectTarget');
                     $(td).find('select[name="guests"]').hide();
                 }
-
             },
             edit: function(td) {
                 Delete.reset(td);
@@ -324,27 +325,35 @@ if (typeof jQuery === 'undefined') {
         var Edit = {
             reset: function(td) {
                 $(td).each(function() {
-                        // Get input element.
-                        var $input = $(this).find('.tabledit-input');
-                        // Get span text.
-                        var text = $(this).find('.tabledit-span').text();
+                    // Get input element.
+                    var $input = $(this).find('.tabledit-input');
+                    // Get span text.
+                    var text = $(this).find('.tabledit-span').text();
                     // Set input/select value with span text.
                     if ($input.is('select')) {
-                        $input.find('option').filter(function() {
+                        $input.find('option').filter(function () {
                             return $.trim($(this).text()) === text;
                         }).attr('selected', true);
                     } else {
                         $input.val(text);
                     }
-
                     // Change to view mode.
                     Mode.view(this);
                 });
+
+                // reset date/time value
+                var $dateColumn = $table.find('td[name="dateColumn"]');
+                $dateColumn.find('input[name="date"]').remove();
+                $dateColumn.find('.tabledit-span').show();
+
+                var $timeColumn = $table.find('td[name="timeColumn"]');
+                $timeColumn.find('select[name="time"]').remove();
+                $timeColumn.find('.tabledit-span').show();
+
             },
             submit: function(td) {
                 // Send AJAX request to server.
                 var ajaxResult = ajax(settings.buttons.edit.action);
-
                 if (ajaxResult === false) {
                     return;
                 }
@@ -355,9 +364,16 @@ if (typeof jQuery === 'undefined') {
                     // Set span text with input/select new value.
                     if ($input.is('select')) {
                         $(this).find('.tabledit-span').text($input.find('option:selected').text());
-                    } else {
-                        $(this).find('.tabledit-span').text($input.val());
                     }
+                    if( $(this).attr("name") === 'dateColumn'){
+                        var input = $(this).find('input[name="date"]');
+                        $(this).find('.tabledit-span').text(input.val());
+                    }
+                    if( $(this).attr("name") === 'timeColumn'){
+                        var text = $(this).find('option:selected').text();
+                        $(this).find('.tabledit-span').text(text);
+                    }
+
                     // Change to view mode.
                     Mode.view(this);
                 });
@@ -395,9 +411,7 @@ if (typeof jQuery === 'undefined') {
                 // Add class "deleted" to row.
                 $(td).parent('tr').addClass('tabledit-deleted-row');
                 // Hide table row.
-                $(td).parent('tr').addClass(settings.mutedClass).find('.tabledit-toolbar button:not(.tabledit-restore-button)').attr('disabled', true);
-                // Show restore button.
-                $(td).find('.tabledit-restore-button').show();
+                $(td).parent('tr').remove();
                 // Set last deleted row.
                 $lastDeletedRow = $(td).parent('tr');
             },
@@ -435,26 +449,47 @@ if (typeof jQuery === 'undefined') {
         };
 
         /**
+         * Parse ajax parametres into array[key, value]
+         * */
+        var parseQueryString = function( queryString ) {
+            var params = {}, queries, temp, i, l;
+
+            // Split into key/value pairs
+            queries = queryString.split("&");
+
+            // Convert the array of strings into an object
+            for ( i = 0, l = queries.length; i < l; i++ ) {
+                temp = queries[i].split('=');
+                params[temp[0]] = temp[1];
+            }
+
+            return params;
+        };
+
+        /**
          * Send AJAX request to server.
          *
          * @param {string} action
          */
         function ajax(action)
         {
-            var $guestsSelect = $table.find('.guestsSelectTarget');
-            var guests = $guestsSelect.find('option:selected').text();
-            alert(guests);
+            var serialize = $table.find('.tabledit-input').serialize();
+            var arrayParams = parseQueryString(serialize);
+            var bookingId = arrayParams['bookingId'];
+
+            var guests = $table.find('.guestsSelectTarget').find('option:selected').text();
             var time = $('select[name="time"]').val();
-            var date = $('input[name="date"]').val();
             var restaurantId = $('input[name="id"]').val();
-            var bookingId = $('input[name="bookingId"]').val();
+            var date_submit = $('input[name="date_submit"]').val();
             var act = action;
             switch(act) {
                 case "edit":
                     settings.url = '/bookings/edit/1';
                     break;
+                case "delete":
+                    settings.url = '/bookings/destroy/1';
+                    break;
                 default:
-                    alert('edit url: ');
             }
             var result = settings.onAjax(action);
 
@@ -465,9 +500,9 @@ if (typeof jQuery === 'undefined') {
             var jqXHR = $.get(settings.url, {
                     guests: guests,
                     time: time,
-                    date: date,
                     restaurantId: restaurantId,
-                    bookingId: bookingId
+                    bookingId: bookingId,
+                    date_submit: date_submit
                 }
                 , function(data, textStatus, jqXHR) {
 
@@ -499,6 +534,13 @@ if (typeof jQuery === 'undefined') {
             });
 
             return jqXHR;
+        }
+
+        /**
+         * update span text when ajax update result with success
+         * */
+        function updteRow(){
+
         }
 
         Draw.columns.identifier();
@@ -687,6 +729,7 @@ if (typeof jQuery === 'undefined') {
                     Edit.submit($td);
                     break;
                 case 27: // Escape.
+                    Edit.reset($td);
                     Delete.reset($td);
                     break;
             }

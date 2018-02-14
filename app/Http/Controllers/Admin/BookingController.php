@@ -30,56 +30,48 @@ class BookingController extends Controller
         $this->booking = $booking;
     }
 
-	public function destroy($id)
+    public function show($id)
+    {
+        $booking = Booking::findOrFail($id);
+
+        return view('pages.admin.showbooking', [
+            'booking' => $booking
+        ]);
+    }
+
+	public function destroy(Request $request)
 	{
-		$restaurant = Auth::user();
-		$booking = Booking::findOrFail($id);
-
-		if ($booking->order_id != null) {
-			return redirect()->route('admin.index')->with('error', 'Il y a une commande pour cette réservation');
-		}
-
+		$booking = Booking::findOrFail($request->get('bookingId'));
 		$booking->delete();
+
 		return redirect()->route('admin.index')->with('message', 'La réservation a été supprimée');
 	}
 
     public function edit(Request $request)
     {
-        \Log::info($request->id);
         \Log::info($request->all());
+        $restaurant = Restaurant::where('id', $request->restaurantId)->first();
+        $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
+        $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
+            ->addHours($restaurant->booking_duration);
 
-        /*
-                $restaurant = null; //Restaurant::where('slug', $slug)->first();
-                $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('bookingDate') . ' ' . $request->get('time'), config('app.timezone'));
-                $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('bookingDate') . ' ' . $request->get('time'), config('app.timezone'))
-                    ->addHours($restaurant->booking_duration);
+        $bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
+        $capacity = $bookingStrategy->getRestaurantCapacity($restaurant, $startHour, $endHour);
 
-                $bookingStrategy = resolve(BookingStrategy::class, ['date' => $startHour]);
-                $capacity = $bookingStrategy->getRestaurantCapacity($restaurant, $startHour, $endHour);
+        $guests = 0;
 
-                $guests = 0;
+        if ($bookingStrategy instanceof BookingOnWeekend) {
+            $guests += $bookingStrategy->increaseCapacity($request->guests);
+        }
 
-                if ($bookingStrategy instanceof BookingOnWeekend) {
-                    $guests += $bookingStrategy->increaseCapacity($request->guests);
-                }
+        if ($request->guests > $capacity + $guests)
+        {
+            return response()->json(['message' => 'Aucune table disponible à cette heure là']);
+        }
+        $booking = $this->updateBooking($request->get('bookingId'), $request, $startHour, $endHour);
+        return response()->json(['message' => 'Reservation mise à jour' , 'bookingId' => $booking->id]);
 
-                if ($request->guests > $capacity + $guests)
-                {
-                    $validator->errors()->add('date', 'Aucune table disponible à cette heure là');
-                    return back()->withInput()->withErrors($validator);
-                }
-                $booking = $this->updateBooking(null, $request, $startHour, $endHour);
-               */
     }
-
-	public function show($id)
-	{
-		$booking = Booking::findOrFail($id);
-
-		return view('pages.admin.showbooking', [
-			'booking' => $booking
-		]);
-	}
 
     private function updateBooking($bookingId, $request, $startHour, $endHour)
     {
@@ -87,7 +79,7 @@ class BookingController extends Controller
         return DB::transaction(function () use ($booking, $request, $startHour, $endHour)
         {
             $order = $booking->order_id ? Order::find($booking->order_id) : null;
-            return $this->booking->update($booking, $request->all(), $startHour, $endHour, $order);
+            return $this->booking->updateAdmin($booking, $request->all(), $startHour, $endHour, $order);
         });
     }
 }
