@@ -126,6 +126,7 @@
 							<th>Personnes</th>
 							<th>Détail de la réservation</th>
 							<th>Détail de la commande</th>
+							<th></th>
 							</thead>
 							<tbody>
 							@if (count($bookings) === 0)
@@ -137,7 +138,7 @@
 									<td></td>
 									<td></td>
 									<td></td>
-								</tr>class="tabledit-view-mode"
+								</tr>
 							@endif
 							@foreach ($bookings as $booking)
 								<tr id="{{$booking->id}}">
@@ -157,7 +158,7 @@
 									@else
 										<td name="detailOrder"><a href="{{ route('admin.orders.show', ['id' => $booking->order_id]) }}">Voir la commande</a></td>
 									@endif
-									<td name="toolbar" class="toolbar-class" style="white-space: nowrap; width: 1%;"></td>
+
 								</tr>
 							@endforeach
 							</tbody>

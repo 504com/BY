@@ -72,14 +72,6 @@ $(function () {
         }
     });
 
-    // Edit/Delete bookings inline
-    $('#daysBookingTable').Tabledit({
-        hideIdentifier: true,
-        columns: {
-            identifier: [0, 'dayDookingId'],
-            editable: [[5, 'dayGuests']]
-        }
-    });
 	// DETAILS
 	$('.detailList').DataTable({
 		"paging": false,

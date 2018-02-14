@@ -187,7 +187,6 @@ if (typeof jQuery === 'undefined') {
 
                         // Add toolbar column header if not exists.
                         if ($table.find('th.tabledit-toolbar-column').length === 0) {
-                            $table.find('tr:first').append('<th class="tabledit-toolbar-column">Modifier / Annuler</th>');
                         }
 
                         // Create edit button.
@@ -219,7 +218,7 @@ if (typeof jQuery === 'undefined') {
                                        </div></div>';
 
                         // Add toolbar column cells.
-                        $table.find('.toolbar-class').append(toolbar);
+                        $table.find('tr:gt(0)').append('<td style="white-space: nowrap; width: 1%;">' + toolbar + '</td>');
                     }
                 }
             }
@@ -368,6 +367,7 @@ if (typeof jQuery === 'undefined') {
                     if( $(this).attr("name") === 'dateColumn'){
                         var input = $(this).find('input[name="date"]');
                         $(this).find('.tabledit-span').text(input.val());
+
                     }
                     if( $(this).attr("name") === 'timeColumn'){
                         var text = $(this).find('option:selected').text();
@@ -377,6 +377,15 @@ if (typeof jQuery === 'undefined') {
                     // Change to view mode.
                     Mode.view(this);
                 });
+
+                // reset date/time value
+                var $dateColumn = $table.find('td[name="dateColumn"]');
+                $dateColumn.find('input[name="date"]').remove();
+                $dateColumn.find('.tabledit-span').show();
+
+                var $timeColumn = $table.find('td[name="timeColumn"]');
+                $timeColumn.find('select[name="time"]').remove();
+                $timeColumn.find('.tabledit-span').show();
 
                 // Set last edited column and row.
                 $lastEditedRow = $(td).parent('tr');
@@ -473,12 +482,15 @@ if (typeof jQuery === 'undefined') {
          */
         function ajax(action)
         {
+            var time = $('select[name="time"]').val();
+            if(time === 'Choissiez le jour'){
+                return false;
+            }
             var serialize = $table.find('.tabledit-input').serialize();
             var arrayParams = parseQueryString(serialize);
             var bookingId = arrayParams['bookingId'];
 
             var guests = $table.find('.guestsSelectTarget').find('option:selected').text();
-            var time = $('select[name="time"]').val();
             var restaurantId = $('input[name="id"]').val();
             var date_submit = $('input[name="date_submit"]').val();
             var act = action;
@@ -726,7 +738,7 @@ if (typeof jQuery === 'undefined') {
                     }
                     break;
                 case 13: // Enter.
-                    Edit.submit($td);
+                    //Edit.submit($td);
                     break;
                 case 27: // Escape.
                     Edit.reset($td);
