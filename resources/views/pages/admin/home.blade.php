@@ -153,8 +153,8 @@
 									<td name="timeColumn" class="tabledit-view-mode">
                                         <span class="tabledit-span">{{date('H\hi', strtotime($booking->start))}}</span>
                                     </td>
-									<td>{{$booking->guests}}</td>
-									<td  name="detailBooking"><a href="{{ route('admin.bookings.show', ['id' => $booking->id]) }}">Voir le détail</a></td>
+									<td name="guestsColmun">{{$booking->guests}}</td>
+									<td name="detailBooking"><a href="{{ route('admin.bookings.show', ['id' => $booking->id]) }}">Voir le détail</a></td>
 									@if( $booking->order_id === null )
 										<td name="noBookingItems"><span class="label label-info">Pas de commande anticipée</span></td>
 									@else

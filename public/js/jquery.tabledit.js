@@ -151,9 +151,26 @@ if (typeof jQuery === 'undefined') {
                                 // Create text input element.
                                 var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="' + settings.columns.editable[i][1] + '" value="' + $(this).text() + '" style="display: none;" disabled>';
 
-                                // Add elements and class "view" to table cell.
-                                $(this).html(span + input);
-                                $(this).addClass('tabledit-view-mode');
+                            // Check if exists the third parameter of editable array.
+                            if (typeof settings.columns.editable[i][2] !== 'undefined') {
+                                // Create select element.
+                                var input = '<select class="tabledit-input ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none;" disabled>';
+
+                                // Create options for select element.
+                                $.each(jQuery.parseJSON(settings.columns.editable[i][2]), function(index, value) {
+                                    if (text === value) {
+                                        input += '<option value="' + index + '" selected>' + value + '</option>';
+                                    } else {
+                                        input += '<option value="' + index + '">' + value + '</option>';
+                                    }
+                                });
+
+                                // Create last piece of select element.
+                                input += '</select>';
+                            }
+                            // Add elements and class "view" to table cell.
+                            $(this).html(span + input);
+                            $(this).addClass('tabledit-view-mode');
 
                        });
                     }
@@ -233,11 +250,16 @@ if (typeof jQuery === 'undefined') {
                     $(td).find('select[name="time"]').remove();
                     $(td).find('.tabledit-span').show();
                 }
-                // Hide selectTime element
+                // Hide dateColumn element
                 if( $(td).attr("name") === 'dateColumn'){
                     // Update hide/show property
                     $(td).find('input[name="date"]').remove();
                     $(td).find('.tabledit-span').show();
+                }
+                // Remove select guests element
+                if( $(td).attr("name") === 'guestsColmun'){
+                    $(td).find('select[name="guests"]').removeClass('guestsSelectTarget');
+                    $(td).find('select[name="guests"]').hide();
                 }
 
             },
@@ -281,6 +303,9 @@ if (typeof jQuery === 'undefined') {
                     $(td).find('.tabledit-span').hide();
 
                 }
+                if( $(td).attr("name") === 'guestsColmun'){
+                    $(td).find('select[name="guests"]').addClass('guestsSelectTarget');
+                }
                 // Add "edit" class and remove "view" class in td element.
                 $(td).addClass('tabledit-edit-mode').removeClass('tabledit-view-mode');
                 // Update toolbar buttons.kjo
@@ -303,8 +328,14 @@ if (typeof jQuery === 'undefined') {
                         var $input = $(this).find('.tabledit-input');
                         // Get span text.
                         var text = $(this).find('.tabledit-span').text();
-
+                    // Set input/select value with span text.
+                    if ($input.is('select')) {
+                        $input.find('option').filter(function() {
+                            return $.trim($(this).text()) === text;
+                        }).attr('selected', true);
+                    } else {
                         $input.val(text);
+                    }
 
                     // Change to view mode.
                     Mode.view(this);
@@ -321,7 +352,12 @@ if (typeof jQuery === 'undefined') {
                 $(td).each(function() {
                     // Get input element.
                     var $input = $(this).find('.tabledit-input');
-                    $(this).find('.tabledit-span').text($input.val());
+                    // Set span text with input/select new value.
+                    if ($input.is('select')) {
+                        $(this).find('.tabledit-span').text($input.find('option:selected').text());
+                    } else {
+                        $(this).find('.tabledit-span').text($input.val());
+                    }
                     // Change to view mode.
                     Mode.view(this);
                 });
@@ -405,12 +441,13 @@ if (typeof jQuery === 'undefined') {
          */
         function ajax(action)
         {
-            var guests = $('input[name="guests"]').val();
-            var guests = $('td[name="guests"]').val();
+            var $guestsSelect = $table.find('.guestsSelectTarget');
+            var guests = $guestsSelect.find('option:selected').text();
+            alert(guests);
             var time = $('select[name="time"]').val();
             var date = $('input[name="date"]').val();
             var restaurantId = $('input[name="id"]').val();
-            var bookingId = $('input[name="guests"]').val();
+            var bookingId = $('input[name="bookingId"]').val();
             var act = action;
             switch(act) {
                 case "edit":
@@ -429,7 +466,8 @@ if (typeof jQuery === 'undefined') {
                     guests: guests,
                     time: time,
                     date: date,
-                    restaurantId: restaurantId
+                    restaurantId: restaurantId,
+                    bookingId: bookingId
                 }
                 , function(data, textStatus, jqXHR) {
 

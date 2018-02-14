@@ -47,11 +47,7 @@ class BookingController extends Controller
     {
         \Log::info($request->id);
         \Log::info($request->all());
-        $validator = $this->validator($request->all());
-        if ($validator->fails())
-        {
-            return back()->withInput()->withErrors($validator);
-        }
+
         /*
                 $restaurant = null; //Restaurant::where('slug', $slug)->first();
                 $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('bookingDate') . ' ' . $request->get('time'), config('app.timezone'));
@@ -84,13 +80,6 @@ class BookingController extends Controller
 			'booking' => $booking
 		]);
 	}
-
-    private function validator(array $data)
-    {
-        return Validator::make($data, [
-            'guests' => 'required|integer|min:1',
-        ]);
-    }
 
     private function updateBooking($bookingId, $request, $startHour, $endHour)
     {
