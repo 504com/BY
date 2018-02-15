@@ -56,6 +56,7 @@ Route::group(['domain' => config('url.restaurant')], function()
 			Route::get('/bilan', ['uses' => 'BilanController@index', 'as' => 'admin.bilan.index']);
 			Route::get('/bilan/chart', ['uses' => 'BilanController@chartYear', 'as' => 'admin.bilan.show'])->middleware('cors');
 			Route::get('/bookings/destroy/{id}', ['uses' => 'BookingController@destroy', 'as' => 'admin.bookings.destroy'])->where('id', '[0-9]+');
+            Route::get('/bookings/store', ['uses' => 'BookingController@store', 'as' => 'admin.bookings.store']);
             Route::get('/bookings/edit/{id}', ['uses' => 'BookingController@edit', 'as' => 'admin.bookings.edit'])->where('id', '[0-9]+');
 			Route::get('/bookings/show/{id}', ['uses' => 'BookingController@show', 'as' => 'admin.bookings.show'])->where('id', '[0-9]+');
             Route::get('/orders', ['uses' => 'OrderController@index', 'as' => 'admin.orders.index']);

@@ -121,6 +121,7 @@ $(function () {
 			});
 		});
 	});
+
 	// PAGE BILAN
 	if ($(location).attr('pathname') == '/bilan') {
 		$.get($(location).attr('pathname') +'/chart', function (r) {

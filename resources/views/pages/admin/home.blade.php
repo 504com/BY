@@ -65,7 +65,7 @@
 						</div>
 					</div>
 				@endif
-				<div class="box">
+				<div id="dayBookingBox" class="box">
 					<div class="box-header">
 						<h3 class="box-title">Réservations du jour</h3>
 					</div>
@@ -111,7 +111,10 @@
 						</table>
 					</div>
 				</div>
-				<div class="box">
+				<div id="bookingListBox" class="box">
+					<div class="box-header new-btn">
+						<button id="addNewBookingBtn" type="button" class="tabledit-save-button btn btn-sm btn-warning">Nouvelle réservation</button>
+					</div>
 					<div class="box-header">
 						<h3 class="box-title">Liste des réservations</h3>
 					</div>

@@ -20,7 +20,7 @@ if (typeof jQuery === 'undefined') {
     'use strict';
 
     // configure input calendar datepicker
-    let optionsDatePicker = {
+    var optionsDatePicker = {
         monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
         today: 'Aujourd\'hui',
@@ -30,14 +30,14 @@ if (typeof jQuery === 'undefined') {
         format: 'dd/mm/yyyy',
         firstDay: 1,
         onClose: function() {
-            let day = this.get('select').day;
+            var day = this.get('select').day;
 
             if (day == 0) {
                 day = 7;
             }
-            let id = $('input[name="id"]').val();
-            let url = laroute.route('workhours.index', {id: id, day: day});
-            let date = this.get('select').obj;
+            var id = $('input[name="id"]').val();
+            var url = laroute.route('workhours.index', {id: id, day: day});
+            var date = this.get('select').obj;
             $.get(url, {
                 date: date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             }, function (data) {
@@ -83,7 +83,7 @@ if (typeof jQuery === 'undefined') {
                 },
                 save: {
                     class: 'btn btn-sm btn-success',
-                    html: 'Save'
+                    html: 'Enregistrer'
                 },
                 restore: {
                     class: 'btn btn-sm btn-warning',
@@ -92,7 +92,10 @@ if (typeof jQuery === 'undefined') {
                 },
                 confirm: {
                     class: 'btn btn-sm btn-danger',
-                    html: 'Confirm'
+                    html: 'Confirmer'
+                },
+                create: {
+                    action: 'create'
                 }
             },
             onDraw: function() {
@@ -486,13 +489,14 @@ if (typeof jQuery === 'undefined') {
             if(time === 'Choissiez le jour'){
                 return false;
             }
+            var restaurantId = $('input[name="id"]').val();
+            var name = $('input[name="name"]').val();
+            var phone = $('input[name="phone"]').val();
+            var guests = $table.find('.guestsSelectTarget').find('option:selected').text();
+            var date_submit = $('input[name="date_submit"]').val();
             var serialize = $table.find('.tabledit-input').serialize();
             var arrayParams = parseQueryString(serialize);
             var bookingId = arrayParams['bookingId'];
-
-            var guests = $table.find('.guestsSelectTarget').find('option:selected').text();
-            var restaurantId = $('input[name="id"]').val();
-            var date_submit = $('input[name="date_submit"]').val();
             var act = action;
             switch(act) {
                 case "edit":
@@ -500,6 +504,10 @@ if (typeof jQuery === 'undefined') {
                     break;
                 case "delete":
                     settings.url = '/bookings/destroy/1';
+                    break;
+                case "create":
+                    guests =  $('select[name="guests"]').val();
+                    settings.url = '/bookings/store';
                     break;
                 default:
             }
@@ -510,6 +518,8 @@ if (typeof jQuery === 'undefined') {
             }
 
             var jqXHR = $.get(settings.url, {
+                    name: name,
+                    phone: phone,
                     guests: guests,
                     time: time,
                     restaurantId: restaurantId,
@@ -746,6 +756,83 @@ if (typeof jQuery === 'undefined') {
                     break;
             }
         });
+
+
+
+        //MANAGE ADDING NEW BOOKINGS
+        $('#addNewBookingBtn').on( 'click', function () {
+
+            // Hide add new booking btn
+            $('#addNewBookingBtn').hide();
+
+            var newBookingErrorBlocHeader='<aside class="text-center alert alert-danger alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+                '<strong>Il y a des erreurs dans le formulaire</strong>' +
+                '<ul>';
+            var newBookingErrorBlocFooter = '</ul></aside>';
+            var newBookingErrorBlocBody = '<li>{{ $error }}</li>';
+
+            var newBookingBox ='' +
+                '<div id="newBookingTable"> <div class="box-header"> <h3 class="box-title">Nouvelle réservation</h3></div>'+
+                '<div class="box-body table-responsive"> <table id="newBookingTable" class="table table-striped table-bordered" cellspacing="0" width="100%">'+
+                '<thead><th>Nom</th><th>Téléphone</th> <th>Date réservée</th> <th>Heure réservée</th><th>Personnes</th><th>Valider / Annuler</th></thead>' +
+                '<tbody><tr></tr></tbody></table> </div></div>';
+
+            $('#bookingListBox .new-btn').prepend(newBookingBox);
+
+            var $tr = $('#newBookingTable tbody').prepend('<tr />').children('tr:first');
+            // --- Create text input elements ---
+            //customer
+            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="name"  id="name" value="">';
+            $tr.append('<td name="organizer">'+input+'</td>');
+
+            //phone
+            input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="phone"  id="phone" value="">';
+            $tr.append('<td name="phone">'+input+'</td>');
+
+            //date booking
+            input =  '<input data-value="" class="form-control target-date"  type="text" name="date" id="date">';
+            $tr.append('<td name="dateColumn">'+input+'</td>');
+            $('input[name="date"]').pickadate(optionsDatePicker);
+
+            //time booking
+            var select = '<select class="form-control"  name="time" id="time" ><option >Choissiez le jour</option></select>';
+            $tr.append('<td name="timeColumn">'+select+'</td>');
+
+            // guests select element
+            var select = '<select class="form-control" name="guests" id="guests">';
+            $.each(jQuery.parseJSON(settings.columns.editable[0][2]), function (index, value) {
+                select += '<option value="' + index + '">' + value + '</option>';
+            });
+            select += '</select>';
+            $tr.append('<td name="guests">'+select+'</td>');
+
+            // btns
+            input = '<button id="cancelBookingBtn" type="button" class="tabledit-save-button btn  btn-sm btn-danger" style="margin: 0px 5px 0px 5px;">Annuler</button>';
+            input += '<button id="confirmBookingBtn"  type="button" class="tabledit-save-button btn  btn-sm btn-success" style="margin: 0px 5px 0px 5px;">Valider</button>';
+            $tr.append('<td>'+input+'</td>');
+
+            $('#cancelBookingBtn').on( 'click', function () {
+                // Hide add new booking btn
+                $('#addNewBookingBtn').show();
+                $('#newBookingTable').remove();
+            });
+
+            $('#confirmBookingBtn').on( 'click', function () {
+                // Send AJAX request to server.
+                var ajaxResult = ajax(settings.buttons.create.action);
+                // Hide add new booking btn
+                $('#addNewBookingBtn').show();
+                $('#newBookingTable').remove();
+                //window.location.reload();
+            });
+
+
+        } );
+
+
 
         return this;
     };
