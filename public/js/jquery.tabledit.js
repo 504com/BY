@@ -113,6 +113,7 @@ if (typeof jQuery === 'undefined') {
         var $lastEditedRow = 'undefined';
         var $lastDeletedRow = 'undefined';
         var $lastRestoredRow = 'undefined';
+        var $currentEditingRow = 'undefinded';
 
         /**
          * Draw Tabledit structure (identifier column, editable columns, toolbar column).
@@ -558,13 +559,6 @@ if (typeof jQuery === 'undefined') {
             return jqXHR;
         }
 
-        /**
-         * update span text when ajax update result with success
-         * */
-        function updteRow(){
-
-        }
-
         Draw.columns.identifier();
         Draw.columns.editable();
         Draw.columns.toolbar();
@@ -785,11 +779,11 @@ if (typeof jQuery === 'undefined') {
             var $tr = $('#newBookingTable tbody').prepend('<tr />').children('tr:first');
             // --- Create text input elements ---
             //customer
-            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="name"  id="name" value="">';
+            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="name"  id="name" placeholder="nom">';
             $tr.append('<td name="organizer">'+input+'</td>');
 
             //phone
-            input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="phone"  id="phone" value="">';
+            input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="phone"  id="phone" placeholder="0601234567">';
             $tr.append('<td name="phone">'+input+'</td>');
 
             //date booking
@@ -810,8 +804,8 @@ if (typeof jQuery === 'undefined') {
             $tr.append('<td name="guests">'+select+'</td>');
 
             // btns
-            input = '<button id="cancelBookingBtn" type="button" class="tabledit-save-button btn  btn-sm btn-danger" style="margin: 0px 5px 0px 5px;">Annuler</button>';
-            input += '<button id="confirmBookingBtn"  type="button" class="tabledit-save-button btn  btn-sm btn-success" style="margin: 0px 5px 0px 5px;">Valider</button>';
+            input = '<button id="confirmBookingBtn"  type="button" class="tabledit-save-button btn  btn-sm btn-success" style="margin: 0px 5px 0px 5px;">Valider</button>';
+            input += '<button id="cancelBookingBtn" type="button" class="tabledit-save-button btn  btn-sm btn-danger" style="margin: 0px 5px 0px 5px;">Annuler</button>';
             $tr.append('<td>'+input+'</td>');
 
             $('#cancelBookingBtn').on( 'click', function () {
