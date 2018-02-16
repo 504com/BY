@@ -488,6 +488,7 @@ if (typeof jQuery === 'undefined') {
         {
             var time = $('select[name="time"]').val();
             if(time === 'Choissiez le jour'){
+                document.getElementById("errorDate").innerHTML = "Séléctionner votre date";
                 return false;
             }
             var restaurantId = $('input[name="id"]').val();
@@ -779,20 +780,20 @@ if (typeof jQuery === 'undefined') {
             var $tr = $('#newBookingTable tbody').prepend('<tr />').children('tr:first');
             // --- Create text input elements ---
             //customer
-            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="name"  id="name" placeholder="nom">';
+            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" required name="name"  id="name" placeholder="nom"><p id="errorName"></p>';
             $tr.append('<td name="organizer">'+input+'</td>');
 
             //phone
-            input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" name="phone"  id="phone" placeholder="0601234567">';
+            input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required min="10"  name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone"></p>';
             $tr.append('<td name="phone">'+input+'</td>');
 
             //date booking
-            input =  '<input data-value="" class="form-control target-date"  type="text" name="date" id="date">';
+            input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" placeholder="Date de réservation"><p id="errorDate"></p>';
             $tr.append('<td name="dateColumn">'+input+'</td>');
             $('input[name="date"]').pickadate(optionsDatePicker);
 
             //time booking
-            var select = '<select class="form-control"  name="time" id="time" ><option >Choissiez le jour</option></select>';
+            var select = '<select class="form-control" required  name="time" id="time" ><option >Choissiez le jour</option></select><p id="errorTime"></p>';
             $tr.append('<td name="timeColumn">'+select+'</td>');
 
             // guests select element
@@ -815,6 +816,26 @@ if (typeof jQuery === 'undefined') {
             });
 
             $('#confirmBookingBtn').on( 'click', function () {
+                //Validation form input
+                var inpObj = document.getElementById("name");
+                if (!inpObj.checkValidity()) {
+                    document.getElementById("errorName").innerHTML = inpObj.validationMessage;
+                    return false;
+                }else{
+                    document.getElementById("errorName").innerHTML = "";
+                }
+                var inpObj = document.getElementById("phone");
+                if (!inpObj.checkValidity()) {
+                    document.getElementById("errorPhone").innerHTML = inpObj.validationMessage;
+                    return false;
+                }else{
+                    document.getElementById("errorPhone").innerHTML = "";
+                }
+                var time = $('select[name="time"]').val();
+                if(time === 'Choissiez le jour'){
+                    document.getElementById("errorDate").innerHTML = "Séléctionner votre date";
+                    return false;
+                }
                 // Send AJAX request to server.
                 var ajaxResult = ajax(settings.buttons.create.action);
                 // Hide add new booking btn

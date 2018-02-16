@@ -96,14 +96,7 @@ class BookingController extends Controller
         $request['details'] = "";
         $request['id'] = $request->restaurantId;
         \Log::info($request->all());
-      $validator = $this->validator($request->all());
 
-       /* if ($validator->fails())
-        {
-            \Log::info('error');
-            return back()->withInput()->withErrors($validator);
-        }
-       */
         $restaurant = Restaurant::where('id',  $request->restaurantId)->first();
         $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
         $endHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'))
@@ -134,7 +127,7 @@ class BookingController extends Controller
     {
         return DB::transaction(function () use ($request, $startHour, $endHour)
         {
-            return $this->booking->create($request->all(), Auth::user()->id, $startHour, $endHour, null);
+            return $this->booking->create($request->all(),$request->name, $startHour, $endHour, null);
         });
     }
 
