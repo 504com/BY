@@ -780,15 +780,15 @@ if (typeof jQuery === 'undefined') {
             var $tr = $('#newBookingTable tbody').prepend('<tr />').children('tr:first');
             // --- Create text input elements ---
             //customer
-            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" required name="name"  id="name" placeholder="nom"><p id="errorName"></p>';
+            var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" required name="name"  id="name" placeholder="nom"><p id="errorName" style="color:red;"></p>';
             $tr.append('<td name="organizer">'+input+'</td>');
 
             //phone
-            input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required min="10"  name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone"></p>';
+            input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required min="10"  name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone" style="color:red;"></p>';
             $tr.append('<td name="phone">'+input+'</td>');
 
             //date booking
-            input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" placeholder="Date de réservation"><p id="errorDate"></p>';
+            input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" placeholder="Date de réservation"><p id="errorDate" style="color:red;"></p>';
             $tr.append('<td name="dateColumn">'+input+'</td>');
             $('input[name="date"]').pickadate(optionsDatePicker);
 
@@ -841,7 +841,7 @@ if (typeof jQuery === 'undefined') {
                 // Hide add new booking btn
                 $('#addNewBookingBtn').show();
                 $('#newBookingTable').remove();
-                //window.location.reload();
+                window.location.reload();
             });
 
 
