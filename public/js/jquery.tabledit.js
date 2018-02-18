@@ -127,7 +127,7 @@ if (typeof jQuery === 'undefined') {
                 return;
                 },
             onFail: function(data) {
-                var blocMsg = '<div class="col-xs-10 col-md-6 col-lg-4">' +
+                /*var blocMsg = '<div class="col-xs-10 col-md-6 col-lg-4">' +
                     '<div class="alert alert-warning fade in" role="alert">' +
                     '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
                     '<span aria-hidden="true">&times;</span>' +
@@ -135,7 +135,7 @@ if (typeof jQuery === 'undefined') {
                     + 'Erreur technique' +
                     '</div>' +
                     '</div>';
-                $('#inlineAjaxMsg').html(blocMsg);
+                $('#inlineAjaxMsg').html(blocMsg);*/
                 return; },
             onAlways: function() { return; },
             onAjax: function() { return; }
@@ -873,6 +873,7 @@ if (typeof jQuery === 'undefined') {
                 // Hide add new booking btn
                 $('#addNewBookingBtn').show();
                 $('#newBookingTable').remove();
+                window.location.reload();
             });
 
 
