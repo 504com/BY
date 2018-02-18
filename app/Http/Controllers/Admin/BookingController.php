@@ -44,7 +44,7 @@ class BookingController extends Controller
 		$booking = Booking::findOrFail($request->get('bookingId'));
 		$booking->delete();
 
-		return redirect()->route('admin.index')->with('message', 'La réservation a été supprimée');
+        return response()->json(['message' => 'La réservation a été supprimée' , 'error' => 'undefined']);
 	}
 
     public function edit(Request $request)
@@ -66,10 +66,10 @@ class BookingController extends Controller
 
         if ($request->guests > $capacity + $guests)
         {
-            return response()->json(['message' => 'Aucune table disponible à cette heure là']);
+            return response()->json(['error' => 'Aucune table disponible à cette heure là' , 'message' => 'undefined']);
         }
         $booking = $this->updateBooking($request->get('bookingId'), $request, $startHour, $endHour);
-        return response()->json(['message' => 'Reservation mise à jour' , 'bookingId' => $booking->id]);
+        return response()->json(['message' => 'Réservation mise à jour' ,  'error' => 'undefined']);
 
     }
 
@@ -95,7 +95,6 @@ class BookingController extends Controller
     {
         $request['details'] = "";
         $request['id'] = $request->restaurantId;
-        \Log::info($request->all());
 
         $restaurant = Restaurant::where('id',  $request->restaurantId)->first();
         $startHour = Carbon::createFromFormat('Y-m-d H:i', $request->get('date_submit') . ' ' . $request->get('time'), config('app.timezone'));
@@ -112,15 +111,13 @@ class BookingController extends Controller
             $guests += $bookingStrategy->increaseCapacity($request->guests);
         }
 
-      /*  if ($request->guests > $capacity + $guests)
+        if ($request->guests > $capacity + $guests)
         {
-            $validator->errors()->add('date', 'Aucune table disponible à cette heure là');
-            return back()->withInput()->withErrors($validator);
+            return response()->json(['error' => 'Aucune table disponible à cette heure là']);
         }
-      */
-        $booking = $this->save($request, $startHour, $endHour);
 
-        return response()->json(['message' => 'Reservation créée' , 'bookingId' => $booking->id]);
+        $booking = $this->save($request, $startHour, $endHour);
+        return response()->json(['message' => 'La réservation a bien été validée' , 'error' => 'undefined']);
     }
 
     private function save($request, $startHour, $endHour)
@@ -129,18 +126,5 @@ class BookingController extends Controller
         {
             return $this->booking->create($request->all(),$request->name, $startHour, $endHour, null);
         });
-    }
-
-
-    private function validator(array $data)
-    {
-            return Validator::make($data, [
-                'name' => 'required',
-                'guests' => 'required|integer|min:1',
-                'date' => 'required',
-                'date_submit' => 'date|date_format:Y-m-d',
-                'time' => ['required', 'regex:/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/'],
-                'phone' => ['required', 'regex:/[0-9]{10}/']
-            ]);
     }
 }

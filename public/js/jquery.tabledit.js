@@ -100,10 +100,43 @@ if (typeof jQuery === 'undefined') {
             },
             onDraw: function() {
                 return; },
-            onSuccess: function() {
+            onSuccess: function(data) {
+                var msg = data['error'];
+                if(msg != 'undefined'){
+                    var blocMsg = '<div class="col-xs-10 col-md-6 col-lg-4">' +
+                        '<div class="alert alert-warning fade in" role="alert">' +
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                        '<span aria-hidden="true">&times;</span>' +
+                        '</button>'
+                        + msg +
+                        '</div>' +
+                        '</div>';
+                    $('#inlineAjaxMsg').html(blocMsg);
+                    return;
+                }
+                msg = data['message'];
+                blocMsg = '<div class="col-xs-10 col-md-6 col-lg-4">' +
+                    '<div class="alert alert-success fade in" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                    '</button>'
+                     + msg +
+                    '</div>' +
+                    '</div>';
+                $('#inlineAjaxMsg').html(blocMsg);
                 return;
                 },
-            onFail: function() { return; },
+            onFail: function(data) {
+                var blocMsg = '<div class="col-xs-10 col-md-6 col-lg-4">' +
+                    '<div class="alert alert-warning fade in" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                    '</button>'
+                    + 'Erreur technique' +
+                    '</div>' +
+                    '</div>';
+                $('#inlineAjaxMsg').html(blocMsg);
+                return; },
             onAlways: function() { return; },
             onAjax: function() { return; }
         };
@@ -537,7 +570,6 @@ if (typeof jQuery === 'undefined') {
                         $table.find('tr.' + settings.warningClass).removeClass(settings.warningClass);
                     }, 1400);
                 }
-
                 settings.onSuccess(data, textStatus, jqXHR);
             }, 'json');
 
@@ -841,7 +873,6 @@ if (typeof jQuery === 'undefined') {
                 // Hide add new booking btn
                 $('#addNewBookingBtn').show();
                 $('#newBookingTable').remove();
-                window.location.reload();
             });
 
 

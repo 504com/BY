@@ -42,6 +42,8 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12 col-md-12 col-lg-12">
+				<div id="inlineAjaxMsg" class="row">
+				</div>
 				@if(session()->has('message'))
 					<div class="row">
 						<div class="col-xs-10 col-md-6 col-lg-4">
