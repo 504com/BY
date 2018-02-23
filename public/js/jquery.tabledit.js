@@ -817,21 +817,39 @@ if (typeof jQuery === 'undefined') {
             $tr.append('<div class="col-md-2" name="organizer"><label>Nom</label>'+input+'</div>');
 
             //phone
-            input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required min="10"  name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone" style="color:red;"></p>';
+            input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required   name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone" style="color:red;"></p>';
             $tr.append('<div  class="col-md-2" name="phone"><label>Téléphone</label>'+input+'</div>');
 
             //date booking
-            input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" placeholder="Date de réservation"><p id="errorDate" style="color:red;"></p>';
+            // configure input calendar datepicker
+            var adminDatePicker = {
+                monthsFull: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                weekdaysShort: ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
+                today: 'Aujourd\'hui',
+                clear: 'Effacer',
+                min: true,
+                formatSubmit: 'yyyy-mm-dd',
+                format: 'dd/mm/yyyy',
+                firstDay: 1,
+                onClose: function() {
+                    $(document.activeElement).blur();
+                }
+            };
+            input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" value=""><p id="errorDate" style="color:red;"></p>';
             $tr.append('<div class="col-md-2" name="dateColumn"><label>Date réservée</label>'+input+'</div>');
-            $('input[name="date"]').pickadate(optionsDatePicker);
+            $('input[name="date"]').pickadate(adminDatePicker);
 
             //time booking
-            var select = '<select class="form-control" required  name="time" id="time" ><option >Choissiez le jour</option></select><p id="errorTime"></p>';
-            $tr.append('<div class="col-md-2" name="timeColumn"><label>Heure réservée</label>'+select+'</div>');
+            var select = '<select class="form-control" required  name="time" id="time" >';
+            $.each(jQuery.parseJSON(settings.columns.editable[0][2]), function (index, value) {
+                select += '<option value="' + index + '">' + value + '</option>';
+            });
+            select += '</select><p id="errorTime"></p>';
+            $tr.append('<div class="col-md-2" name="timeColumn" id="timeColumn"><label>Heure réservée</label>'+select+'</div>');
 
             // guests select element
             var select = '<select class="form-control" name="guests" id="guests">';
-            $.each(jQuery.parseJSON(settings.columns.editable[0][2]), function (index, value) {
+            $.each(jQuery.parseJSON(settings.columns.editable[1][2]), function (index, value) {
                 select += '<option value="' + index + '">' + value + '</option>';
             });
             select += '</select>';
@@ -864,8 +882,8 @@ if (typeof jQuery === 'undefined') {
                 }else{
                     document.getElementById("errorPhone").innerHTML = "";
                 }
-                var time = $('select[name="time"]').val();
-                if(time === 'Choissiez le jour'){
+                var date = $('input[name="date"]').val();
+                if(date === ''){
                     document.getElementById("errorDate").innerHTML = "Séléctionner votre date";
                     return false;
                 }
