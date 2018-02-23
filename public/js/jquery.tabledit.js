@@ -801,32 +801,33 @@ if (typeof jQuery === 'undefined') {
             var newBookingErrorBlocFooter = '</ul></aside>';
             var newBookingErrorBlocBody = '<li>{{ $error }}</li>';
 
-            var newBookingBox ='' +
-                '<div id="newBookingTable"> <div class="box-header"> <h3 class="box-title">Nouvelle réservation</h3></div>'+
-                '<div class="box-body table-responsive"> <table id="newBookingTable" class="table table-striped table-bordered" cellspacing="0" width="100%">'+
-                '<thead><th>Nom</th><th>Téléphone</th> <th>Date réservée</th> <th>Heure réservée</th><th>Personnes</th><th>Valider / Annuler</th></thead>' +
-                '<tbody><tr></tr></tbody></table> </div></div>';
+            var newBookingBox =
+                '' +
+                '<div class="row pull-left">' +
+                '<div id="newBookingTable" class="col-md-12 container pull-left">'+
+                '<div class="box-header"> <h3 class="box-title container pull-left">Nouvelle réservation</h3></div>'+
+                '<div id="mainTable" class="col-md-12 container pull-left"><div></div></div></div></div></div>';
 
             $('#bookingListBox .new-btn').prepend(newBookingBox);
 
-            var $tr = $('#newBookingTable tbody').prepend('<tr />').children('tr:first');
+            var $tr = $('#newBookingTable #mainTable').prepend('<div />').children('div:first');
             // --- Create text input elements ---
             //customer
             var input = '<input class="tabledit-input ' + settings.inputClass + '" type="text" required name="name"  id="name" placeholder="nom"><p id="errorName" style="color:red;"></p>';
-            $tr.append('<td name="organizer">'+input+'</td>');
+            $tr.append('<div class="col-md-2" name="organizer"><label>Nom</label>'+input+'</div>');
 
             //phone
             input = '<input class="tabledit-input ' + settings.inputClass + '" type="number" required min="10"  name="phone"  id="phone" placeholder="0601234567"><p id="errorPhone" style="color:red;"></p>';
-            $tr.append('<td name="phone">'+input+'</td>');
+            $tr.append('<div  class="col-md-2" name="phone"><label>Téléphone</label>'+input+'</div>');
 
             //date booking
             input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" placeholder="Date de réservation"><p id="errorDate" style="color:red;"></p>';
-            $tr.append('<td name="dateColumn">'+input+'</td>');
+            $tr.append('<div class="col-md-2" name="dateColumn"><label>Date réservée</label>'+input+'</div>');
             $('input[name="date"]').pickadate(optionsDatePicker);
 
             //time booking
             var select = '<select class="form-control" required  name="time" id="time" ><option >Choissiez le jour</option></select><p id="errorTime"></p>';
-            $tr.append('<td name="timeColumn">'+select+'</td>');
+            $tr.append('<div class="col-md-2" name="timeColumn"><label>Heure réservée</label>'+select+'</div>');
 
             // guests select element
             var select = '<select class="form-control" name="guests" id="guests">';
@@ -834,12 +835,12 @@ if (typeof jQuery === 'undefined') {
                 select += '<option value="' + index + '">' + value + '</option>';
             });
             select += '</select>';
-            $tr.append('<td name="guests">'+select+'</td>');
+            $tr.append('<div class="col-md-2" name="guests"><label>Personnes</label>'+select+'</div>');
 
             // btns
             input = '<button id="confirmBookingBtn"  type="button" class="tabledit-save-button btn  btn-sm btn-success" style="margin: 0px 5px 0px 5px;">Valider</button>';
             input += '<button id="cancelBookingBtn" type="button" class="tabledit-save-button btn  btn-sm btn-danger" style="margin: 0px 5px 0px 5px;">Annuler</button>';
-            $tr.append('<td>'+input+'</td>');
+            $tr.append('<br/><div class="col-md-12 col-sm-12 col-xs-12">'+input+'</div>');
 
             $('#cancelBookingBtn').on( 'click', function () {
                 // Hide add new booking btn
