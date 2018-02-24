@@ -546,6 +546,7 @@ if (typeof jQuery === 'undefined') {
                     break;
                 default:
             }
+
             var result = settings.onAjax(action);
 
             if (result === false) {
@@ -571,10 +572,10 @@ if (typeof jQuery === 'undefined') {
                     }, 1400);
                 }
                 settings.onSuccess(data, textStatus, jqXHR);
-            }, 'json');
+            }, 'json'); jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
 
-            jqXHR.fail(function(jqXHR, textStatus, errorThrown) {
-                if (action === settings.buttons.delete.action) {
+
+             if (action === settings.buttons.delete.action) {
                     $lastDeletedRow.removeClass(settings.mutedClass).addClass(settings.dangerClass);
                     $lastDeletedRow.find('.tabledit-toolbar button').attr('disabled', false);
                     $lastDeletedRow.find('.tabledit-toolbar .tabledit-restore-button').hide();
@@ -830,26 +831,54 @@ if (typeof jQuery === 'undefined') {
                 min: true,
                 formatSubmit: 'yyyy-mm-dd',
                 format: 'dd/mm/yyyy',
-                firstDay: 1,
-                onClose: function() {
-                    $(document.activeElement).blur();
-                }
+                firstDay: 1
             };
             input =  '<input data-value="" class="form-control target-date"  type="text" required name="date" id="date" value=""><p id="errorDate" style="color:red;"></p>';
             $tr.append('<div class="col-md-2" name="dateColumn"><label>Date réservée</label>'+input+'</div>');
             $('input[name="date"]').pickadate(adminDatePicker);
 
             //time booking
-            var select = '<select class="form-control" required  name="time" id="time" >';
-            $.each(jQuery.parseJSON(settings.columns.editable[0][2]), function (index, value) {
-                select += '<option value="' + index + '">' + value + '</option>';
-            });
-            select += '</select><p id="errorTime"></p>';
-            $tr.append('<div class="col-md-2" name="timeColumn" id="timeColumn"><label>Heure réservée</label>'+select+'</div>');
+            var select = '<select class="form-control" required  name="time" id="time" >' +
+                '<option value="08:00">08:00</option>' +
+                '<option value="08:30">08:30</option>' +
+                '<option value="09:00">09:00</option>' +
+                '<option value="09:30">09:30</option>' +
+                '<option value="10:00">10:00</option>' +
+                '<option value="10:30">10:30</option>' +
+                '<option value="11:00">11:00</option>' +
+                '<option value="11:30">11:30</option>' +
+                '<option value="12:00">12:00</option>' +
+                '<option value="12:30">12:30</option>' +
+                '<option value="13:00">13:00</option>' +
+                '<option value="13:30">13:30</option>' +
+                '<option value="14:00">14:00</option>' +
+                '<option value="14:30">14:30</option>' +
+                '<option value="15:00">15:00</option>' +
+                '<option value="15:30">15:30</option>' +
+                '<option value="16:00">16:00</option>' +
+                '<option value="16:30">16:30</option>' +
+                '<option value="17:00">17:00</option>' +
+                '<option value="17:30">17:30</option>' +
+                '<option value="18:00">18:00</option>' +
+                '<option value="18:30">18:30</option>' +
+                '<option value="19:00">19:00</option>' +
+                '<option value="19:30">19:30</option>' +
+                '<option value="20:00">20:00</option>' +
+                '<option value="20:30">20:30</option>' +
+                '<option value="21:00">21:00</option>' +
+                '<option value="21:30">21:30</option>' +
+                '<option value="22:00">22:00</option>' +
+                '<option value="22:30">22:30</option>' +
+                '<option value="23:00">23:00</option>' +
+                '<option value="23:30">23:30</option>' +
+                '<option value="00:00">00:00</option>' +
+                '<option value="00:30">00:30</option>' +
+                '</select><p id="errorTime"></p>';
+            $tr.append('<div class="col-md-2" name="timeColumn"><label>Heure réservée</label>'+select+'</div>');
 
             // guests select element
             var select = '<select class="form-control" name="guests" id="guests">';
-            $.each(jQuery.parseJSON(settings.columns.editable[1][2]), function (index, value) {
+            $.each(jQuery.parseJSON(settings.columns.editable[0][2]), function (index, value) {
                 select += '<option value="' + index + '">' + value + '</option>';
             });
             select += '</select>';
@@ -892,7 +921,7 @@ if (typeof jQuery === 'undefined') {
                 // Hide add new booking btn
                 $('#addNewBookingBtn').show();
                 $('#newBookingTable').remove();
-                window.location.reload();
+                //window.location.reload();
             });
 
 
