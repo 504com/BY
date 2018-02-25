@@ -76,7 +76,7 @@ Route::group(['domain' => config('url.restaurant')], function()
 			Route::put('/products', ['uses' => 'ProductController@edit', 'as' => 'admin.products.edit']);
 			Route::get('/products/{id}', ['uses' => 'ProductController@destroy', 'as' => 'admin.products.destroy'])->where('id', '[0-9]+');
 			Route::get('/workhours', ['uses' => 'WorkhourController@show', 'as' => 'admin.workhours.show']);
-            Route::get('/workhours/{id}/day/{day}', ['uses' => 'WorkhourController@index','as' => 'workhours.index']);
+            Route::get('/workhours/{id}/day/{day}', ['uses' => 'WorkhourController@index','as' => 'admin.workhours.index']);
 			Route::get('/workhours/form', ['uses' => 'WorkhourController@getForm', 'as' => 'admin.form.workhours']);
 			Route::post('/workhours', ['uses' => 'WorkhourController@create', 'as' => 'admin.workhours.create']);
 			Route::get('/workhours/destroy/{id}', ['uses' => 'WorkhourController@destroy', 'as' => 'admin.workhours.destroy'])->where('id', '[0-9]+');

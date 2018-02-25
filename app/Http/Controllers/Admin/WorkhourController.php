@@ -25,7 +25,7 @@ class WorkhourController extends Controller
         return view('partials.bookings.time', compact('hours'));
     }
 
-    private function getBookingHours(Carbon $date, Collection $workhours, $bookingDuration)
+    public function getBookingHours(Carbon $date, Collection $workhours, $bookingDuration)
     {
         return $workhours->map(function ($workhour) use ($bookingDuration, $date) {
             $start = Carbon::createFromFormat('H:i', $workhour->start);

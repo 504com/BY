@@ -179,6 +179,8 @@
 	<script src="{{ asset('js/vendor/pickadate/picker.js') }}"></script>
 	<script src="{{ asset('js/vendor/pickadate/picker.date.js') }}"></script>
 	<script src="{{ asset('js/vendor/pickadate/picker.time.js') }}"></script>
+	<script src="{{ asset('js/jquery.tabledit.js') }}"></script>
+	<script src="{{ asset('js/adminbooking.js') }}"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/fr.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
