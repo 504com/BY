@@ -11,13 +11,14 @@ class AdminController extends Controller
 {
     public function index()
     {
+
+        $now = Carbon::today();
+        $today = $now->format('Y-m-d 00:00:00');
+
         $restaurant = Auth::user();
-		$bookings = $restaurant->bookings()->get();
+		$bookings = $restaurant->bookings()->where('start', '>=', $today)->get();
 
-		// Récupération du total de personnes à h+1
-		$now = Carbon::today();
-		$today = $now->format('Y-m-d 00:00:00');
-
+        // Récupération du total de personnes à h+1
 		$tomorrow = $now->addDay();
 		$startHour = Carbon::now()->format('Y-m-d H:00:00');
 		$endHour = Carbon::now()->addHour(2)->format('Y-m-d H:00:00');
