@@ -80,14 +80,12 @@
 							<th>Personnes</th>
 							<th>Détail de la réservation</th>
 							<th>Détail de la commande</th>
-							<th></th>
 							</thead>
 							<tbody>
 							@if (count($dayBookings) === 0)
 								<tr>
 									<td></td>
 									<td><span class="label label-danger">Aucune réservation enregistrée</span></td>
-									<td></td>
 									<td></td>
 									<td></td>
 									<td></td>
@@ -106,7 +104,6 @@
 									@else
 										<td><a href="{{ route('admin.orders.show', ['id' => $dayBooking->order_id]) }}">Voir la commande</a></td>
 									@endif
-									<td><a href="{{ route('admin.bookings.destroy', ['id' => $dayBooking->id]) }}" class="btn btn-danger"><i class="fa fa-times"></i></a></td>
 								</tr>
 							@endforeach
 							</tbody>

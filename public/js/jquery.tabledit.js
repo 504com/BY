@@ -944,7 +944,10 @@ if (typeof jQuery === 'undefined') {
                 // Hide add new booking btn
                 $('#addNewBookingBtn').show();
                 $('#newBookingTable').remove();
-                //window.location.reload();
+                window.setTimeout(function(){
+                    window.location.reload();
+                }, 1500);
+
             });
 
 
